@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian Trust — Hero</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    min-height: 100%;
+  }
+
+  body {
+    background: #080808;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(0,0,0,0.62) 0%,
+        rgba(0,0,0,0.45) 35%,
+        rgba(0,0,0,0.30) 65%,
+        rgba(0,0,0,0.43) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(0,0,0,0.18) 0%,
+        rgba(0,0,0,0.04) 38%,
+        rgba(0,0,0,0.68) 100%
+      ),
+      url("https://assets.sutori.com/user-uploads/image/7c5e1929-b07c-4aa6-9309-1b1bb0c9d2f9/81a6abc1-24d5-4282-81df-4cb88e39cba8.jpeg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  /* Slight dark border exactly like the reference */
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 3px solid rgba(255,255,255,0.15);
+    pointer-events: none;
+    border-radius: 4px;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    position: fixed; /* Changed from absolute to fixed */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 86px;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+  }
+
+  .logo-placeholder {
+    width: 185px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    flex-shrink: 0;
+  }
+
+  /*
+    Replace the contents of .logo-placeholder with your real logo.
+    The dimensions are kept close to the reference screenshot.
+  */
+  .logo-mark {
+    width: 39px;
+    height: 39px;
+    border: 3px solid #ffca05;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .logo-mark::before {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 19px;
+    background: #ffca05;
+    border-radius: 8px;
+    left: 14px;
+    top: 7px;
+    transform: rotate(28deg);
+  }
+
+  .logo-mark::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: #ffca05;
+    border-radius: 50%;
+    left: 24px;
+    top: 4px;
+  }
+
+  .logo-text {
+    line-height: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo-name {
+    display: block;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .logo-sub {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #ddd;
+    white-space: nowrap;
+  }
+
+  .logo-sub::before,
+  .logo-sub::after {
+    content: "";
+    height: 1px;
+    flex-grow: 1;
+    background: #ffca05;
+  }
+
+  .nav-links {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 37px;
+  }
+
+  .nav-links a {
+    position: relative;
+    color: rgba(255,255,255,0.88);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  .nav-links a.active::after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #ffca05;
+    border-radius: 50%;
+    left: 50%;
+    bottom: -13px;
+    transform: translateX(-50%);
+  }
+
+  .donate {
+    margin-left: 52px;
+    width: 113px;
+    height: 42px;
+    border-radius: 25px;
+    background: #ffca05;
+    color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+    transition: transform .2s ease;
+  }
+
+  .donate:hover {
+    transform: translateY(-2px);
+  }
+
+  /* ===== HERO CONTENT ===== */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    width: min(760px, 48vw);
+    margin-left: 10%;
+    padding-top: 23vh;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 39px;
+    color: #d8d8d8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 45px;
+    height: 2px;
+    background: #ffca05;
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-size: clamp(54px, 4.35vw, 78px);
+    line-height: 0.96;
+    letter-spacing: -3.2px;
+    font-weight: 800;
+    margin-bottom: 40px;
+  }
+
+  h1 span {
+    display: block;
+  }
+
+  h1 .yellow {
+    color: #ffca05;
+  }
+
+  .description {
+    width: 690px;
+    max-width: 100%;
+    color: rgba(255,255,255,0.82);
+    font-size: 20px;
+    line-height: 1.55;
+    letter-spacing: -0.25px;
+    margin-bottom: 43px;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .btn {
+    height: 55px;
+    padding: 0 36px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+    transition: all .2s ease;
+  }
+
+  .btn-primary {
+    background: #ffca05;
+    color: #111;
+  }
+
+  .btn-secondary {
+    border: 1px solid rgba(255,255,255,0.45);
+    color: #fff;
+    background: rgba(0,0,0,0.08);
+    min-width: 278px;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  /* ===== SCROLL INDICATOR ===== */
+  .scroll-indicator {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: 76px;
+    transform: translateX(-50%);
+    text-align: center;
+    color: rgba(255,255,255,0.72);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+  }
+
+  .scroll-arrow {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #ffca05;
+    border-bottom: 2px solid #ffca05;
+    transform: rotate(45deg);
+    margin: 17px auto 0;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1200px) {
+    .navbar {
+      padding: 0 6%;
+    }
+
+    .hero-content {
+      margin-left: 6%;
+      width: 65vw;
+    }
+
+    .nav-links {
+      gap: 22px;
+    }
+
+    .donate {
+      margin-left: 25px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .navbar {
+      height: 76px;
+      padding: 0 25px;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .donate {
+      margin-left: auto;
+    }
+
+    .hero {
+      background-position: 57% center;
+    }
+
+    .hero-content {
+      margin-left: 25px;
+      margin-right: 25px;
+      width: auto;
+      padding-top: 190px;
+    }
+
+    h1 {
+      font-size: clamp(46px, 8vw, 70px);
+      letter-spacing: -2.5px;
+    }
+
+    .description {
+      font-size: 17px;
+    }
+
+    .scroll-indicator {
+      bottom: 35px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .logo-placeholder {
+      width: 150px;
+    }
+
+    .logo-name {
+      font-size: 15px;
+    }
+
+    .logo-sub {
+      font-size: 6px;
+    }
+
+    .logo-mark {
+      width: 33px;
+      height: 33px;
+    }
+
+    .logo-mark::before {
+      left: 11px;
+      top: 5px;
+    }
+
+    .logo-mark::after {
+      left: 20px;
+      top: 3px;
+    }
+
+    .donate {
+      width: 92px;
+      height: 38px;
+      font-size: 9px;
+    }
+
+    .hero {
+      min-height: 100svh;
+      background-position: 59% center;
+    }
+
+    .hero-content {
+      padding-top: 145px;
+    }
+
+    .eyebrow {
+      font-size: 8px;
+      letter-spacing: 2.5px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow::before {
+      width: 30px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 12vw, 62px);
+      line-height: .98;
+      letter-spacing: -2px;
+      margin-bottom: 28px;
+    }
+
+    .description {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+
+    .actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn,
+    .btn-secondary {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .scroll-indicator {
+      display: none;
+    }
+  }
+
+  /* ===== SMOOTH SCROLLING ===== */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* ===== NAVBAR SCROLL TRANSITION ===== */
+  .navbar.scrolled {
+    background: #ffffff;
+    height: 70px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .navbar.scrolled .logo-name {
+    color: #000;
+  }
+
+  .navbar.scrolled .logo-sub {
+    color: #666;
+  }
+
+  .navbar.scrolled .nav-links a {
+    color: #000;
+  }
+
+  /* ===== MARQUEE BANNER ===== */
+  .marquee-wrapper {
+    background: #ffffff;
+    padding: 30px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+    z-index: 4;
+  }
+
+  .marquee-content {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #000;
+  }
+
+  .marquee-content span.yellow-plus {
+    color: #ffca05;
+    margin: 0 40px;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ===== SCROLL REVEAL ANIMATION ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.9s cubic-bezier(0.25, 1, 0.5, 1); /* Buttery smooth ease-out */
+  }
+
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+
+  <!-- NAVIGATION -->
+  <header class="navbar">
+
+    <!-- LOGO PLACEHOLDER: replace this block with your logo -->
+    <div class="logo-placeholder">
+      <div class="logo-mark"></div>
+      <div class="logo-text">
+        <span class="logo-name">MERIDIAN</span>
+        <span class="logo-sub">FOUNDATION TRUST</span>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#" class="active">HOME</a>
+      <a href="#">ABOUT</a>
+      <a href="#">OUR WORK</a>
+      <a href="#">ECOSYSTEM</a>
+      <a href="#">IMPACT</a>
+      <a href="#">STORIES</a>
+      <a href="#">GET INVOLVED</a>
+    </nav>
+
+    <a class="donate" href="#">DONATE</a>
+  </header>
+
+  <!-- HERO -->
+  <main class="hero-content">
+
+    <div class="eyebrow">
+      MERIDIAN TRUST — FOUNDATION FOR CHANGE
+    </div>
+
+    <h1>
+      <span>Building opportunity.</span>
+      <span class="yellow">Creating impact.</span>
+      <span>Shaping tomorrow.</span>
+    </h1>
+
+    <p class="description">
+      Meridian Trust exists to widen the circle of opportunity — supporting
+      education, skills and community-led change, and building pathways
+      for people to shape their own futures.
+    </p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="#">EXPLORE OUR IMPACT</a>
+      <a class="btn btn-secondary" href="#">SUPPORT OUR MISSION</a>
+    </div>
+
+  </main>
+
+  <!-- SCROLL INDICATOR -->
+  <div class="scroll-indicator">
+    SCROLL TO DISCOVER
+    <div class="scroll-arrow"></div>
+  </div>
+
+</section>
+
+<!-- MARQUEE SECTION -->
+<div class="marquee-wrapper">
+  <!-- Content is duplicated inside to create the seamless loop -->
+  <div class="marquee-content">
+    OPPORTUNITY <span class="yellow-plus">+</span> DIGNITY <span class="yellow-plus">+</span> IMPACT <span class="yellow-plus">+</span> EDUCATION <span class="yellow-plus">+</span> SKILLS <span class="yellow-plus">+</span> COMMUNITY <span class="yellow-plus">+</span>
+    OPPORTUNITY <span class="yellow-plus">+</span> DIGNITY <span class="yellow-plus">+</span> IMPACT <span class="yellow-plus">+</span> EDUCATION <span class="yellow-plus">+</span> SKILLS <span class="yellow-plus">+</span> COMMUNITY <span class="yellow-plus">+</span>
+  </div>
+</div>
+
+<!-- DEMO SECTION TO SHOW SCROLL REVEAL -->
+<section style="background: #ffffff; padding: 100px 10%; min-height: 100vh;">
+  <div class="reveal" style="max-width: 600px;">
+    <h2 style="font-size: 48px; color: #000; margin-bottom: 20px;">A vision built around opportunity.</h2>
+    <p style="color: #444; font-size: 20px; line-height: 1.6;">
+      This text will smoothly fade and slide up when you scroll down to it, exactly like the founder section in the video.
+    </p>
+  </div>
+</section>
+
+<script>
+  // 1. Sticky Navbar Logic
+  const navbar = document.querySelector('.navbar');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // 2. Scroll Reveal Logic (Intersection Observer)
+  const revealElements = document.querySelectorAll('.reveal');
+  
+  // Options: Trigger when 15% of the element is visible
+  const revealOptions = {
+    threshold: 0.15,
+    rootMargin: "0px 0px -50px 0px" 
+  };
+
+  const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) {
+        return;
+      } else {
+        entry.target.classList.add('active');
+        // Stop observing once it has been revealed
+        observer.unobserve(entry.target); 
+      }
+    });
+  }, revealOptions);
+
+  revealElements.forEach(el => {
+    revealOnScroll.observe(el);
+  });
+</script>
+</body>
+</html>

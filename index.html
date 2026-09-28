@@ -1,0 +1,4839 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian Trust — Premium</title>
+    <link rel="icon" type="image/svg+xml" href="svg.svg">
+
+    <!-- GSAP & Lenis Libraries for Premium Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Required for Lenis smooth scrolling to work properly */
+        html.lenis {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+
+        body {
+            background: #080808;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            background-image:
+                linear-gradient(90deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.45) 35%, rgba(0, 0, 0, 0.30) 65%, rgba(0, 0, 0, 0.43) 100%),
+                linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.04) 38%, rgba(0, 0, 0, 0.68) 100%),
+                url("https://assets.sutori.com/user-uploads/image/7c5e1929-b07c-4aa6-9309-1b1bb0c9d2f9/81a6abc1-24d5-4282-81df-4cb88e39cba8.jpeg");
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+            border-radius: 4px;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 50;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 86px;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+        }
+
+        .navbar.scrolled {
+            background: #ffffff;
+            height: 70px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-placeholder {
+            width: 185px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            flex-shrink: 0;
+        }
+
+        .logo-mark {
+            width: 39px;
+            height: 39px;
+            border: 3px solid #ffca05;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .logo-mark::before {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 19px;
+            background: #ffca05;
+            border-radius: 8px;
+            left: 14px;
+            top: 7px;
+            transform: rotate(28deg);
+        }
+
+        .logo-mark::after {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: #ffca05;
+            border-radius: 50%;
+            left: 24px;
+            top: 4px;
+        }
+
+        .logo-text {
+            line-height: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-name {
+            display: block;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .logo-sub {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ddd;
+            transition: color 0.3s ease;
+        }
+
+        .logo-sub::before,
+        .logo-sub::after {
+            content: "";
+            height: 1px;
+            flex-grow: 1;
+            background: #ffca05;
+        }
+
+        .navbar.scrolled .logo-name {
+            color: #000;
+        }
+
+        .navbar.scrolled .logo-sub {
+            color: #666;
+        }
+
+        .nav-links {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 37px;
+            position: relative;
+        }
+
+        .nav-links a {
+            position: relative;
+            color: rgba(255, 255, 255, 0.88);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: color 0.3s ease;
+            z-index: 2;
+        }
+
+        .navbar.scrolled .nav-links a {
+            color: #000;
+        }
+
+        .nav-indicator {
+            position: absolute;
+            left: 0;
+            bottom: -13px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffca05;
+            pointer-events: none;
+            transition: left 0.35s ease, bottom 0.35s ease, opacity 0.25s ease;
+            box-shadow: 0 0 0 6px rgba(255, 202, 5, 0.12);
+            transform: translateX(-50%);
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .donate {
+            margin-left: 52px;
+            width: 113px;
+            height: 42px;
+            border-radius: 25px;
+            background: #ffca05;
+            color: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2.2px;
+            transition: transform .2s ease;
+        }
+
+        .donate:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ===== HERO CONTENT ===== */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: min(760px, 48vw);
+            margin-left: 10%;
+            padding-top: 25vh;
+        }
+
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 39px;
+            color: #d8d8d8;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            overflow: hidden;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 45px;
+            height: 2px;
+            background: #ffca05;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-size: clamp(54px, 4.35vw, 78px);
+            line-height: 0.96;
+            letter-spacing: -3.2px;
+            font-weight: 800;
+            margin-bottom: 40px;
+        }
+
+        h1 span {
+            display: block;
+            overflow: hidden;
+            padding-bottom: 10px;
+        }
+
+        h1 .yellow {
+            color: #ffca05;
+        }
+
+        .char {
+            display: inline-block;
+        }
+
+        /* For text animation */
+
+        .description {
+            width: 690px;
+            max-width: 100%;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 20px;
+            line-height: 1.55;
+            letter-spacing: -0.25px;
+            margin-bottom: 43px;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn {
+            height: 55px;
+            padding: 0 36px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2.2px;
+            transition: all .2s ease;
+        }
+
+        .btn-primary {
+            background: #ffca05;
+            color: #111;
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            color: #fff;
+            background: rgba(0, 0, 0, 0.08);
+            min-width: 278px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ===== MARQUEE BANNER ===== */
+        .marquee-wrapper {
+            background: #ffffff;
+            padding: 30px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            z-index: 4;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #000;
+        }
+
+        .marquee-content span.yellow-plus {
+            color: #ffca05;
+            margin: 0 40px;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ===== NEW: IMAGE ANIMATION LAYOUT ===== */
+        .content-section {
+            background: #ffffff;
+            padding: 120px 10%;
+            color: #000;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            margin-bottom: 120px;
+        }
+
+        .text-block h2 {
+            font-size: clamp(32px, 4vw, 56px);
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 30px;
+        }
+
+        .text-block p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* The magic image reveal container */
+        .image-reveal-container {
+            width: 100%;
+            height: 70vh;
+            overflow: hidden;
+            position: relative;
+            border-radius: 4px;
+            /* This clip-path starts closed and opens on scroll */
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+        }
+
+        .image-reveal-container img {
+            width: 100%;
+            height: 120%;
+            /* Extra height for parallax */
+            object-fit: cover;
+            position: absolute;
+            top: -10%;
+            /* Offset for parallax */
+            left: 0;
+            /* Starts zoomed in */
+            transform: scale(1.3);
+        }
+
+        .full-width-image {
+            width: 100%;
+            height: 80vh;
+            margin-top: 100px;
+        }
+
+        /* ===== FOUNDER SECTION ===== */
+        .founder-section {
+            background: #ffffff;
+            padding: 100px 10% 150px 10%;
+            color: #000;
+        }
+
+        .founder-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 120px;
+            align-items: center;
+        }
+
+        /* Image Column */
+        .founder-image-col {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .founder-img {
+            width: 100%;
+            height: auto;
+            border-radius: 40px;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+
+        .yellow-circle {
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            width: 200px;
+            height: 200px;
+            background: #ffca05;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .black-circle {
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            width: 110px;
+            height: 110px;
+            background: #000;
+            border-radius: 50%;
+            border: 12px solid #fff;
+            z-index: 3;
+        }
+
+        /* Text Column */
+        .founder-text-col {
+            padding-right: 20px;
+        }
+
+        .founder-eyebrow {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #999;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .founder-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .founder-heading {
+            font-size: clamp(36px, 4vw, 48px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            color: #000;
+        }
+
+        .quote-icon {
+            color: #ffca05;
+            font-size: 60px;
+            font-weight: 900;
+            line-height: 1;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .quote-text {
+            font-size: 21px;
+            line-height: 1.5;
+            color: #444;
+            margin-bottom: 40px;
+        }
+
+        .founder-meta {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #999;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .placeholder-badge {
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 9px;
+            color: #999;
+            letter-spacing: 1.5px;
+        }
+
+        .founder-bio {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 50px;
+            max-width: 90%;
+        }
+
+        .founder-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            color: #000;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .arrow-btn {
+            width: 32px;
+            height: 32px;
+            background: #ffca05;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            transition: transform 0.2s ease;
+        }
+
+        .founder-link:hover .arrow-btn {
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 900px) {
+            .founder-grid {
+                grid-template-columns: 1fr;
+                gap: 80px;
+            }
+        }
+
+        /* ===== OUR WORK SECTION ===== */
+        .our-work-section {
+            background: #ffffff;
+            padding: 50px 10% 150px 10%;
+            color: #000;
+        }
+
+        .our-work-header {
+            margin-bottom: 60px;
+        }
+
+        .our-work-eyebrow {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #999;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .our-work-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .our-work-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .our-work-heading {
+            font-size: clamp(36px, 4vw, 48px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            font-weight: 800;
+            color: #000;
+            margin: 0;
+        }
+
+        .our-work-sub {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #666;
+            max-width: 400px;
+            margin-bottom: 5px;
+        }
+
+        /* Work Grid */
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 260px;
+            gap: 20px;
+        }
+
+        .work-card {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #111;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .work-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .card-wide {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+
+        .work-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: 2;
+        }
+
+        .card-number {
+            position: relative;
+            z-index: 3;
+            padding: 24px;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 2px;
+        }
+
+        .card-icon {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            z-index: 3;
+            width: 28px;
+            height: 28px;
+            background: #ffca05;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 3;
+            padding: 24px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 1024px) {
+            .work-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .card-large,
+            .card-wide {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-large,
+            .card-wide {
+                grid-column: span 1;
+            }
+
+            .our-work-title-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+        }
+
+        /* ===== INITIATIVES SECTION ===== */
+        .initiatives-section {
+            background: #f9f9f9;
+            padding: 100px 10% 150px 10%;
+            color: #000;
+        }
+
+        .initiatives-header {
+            margin-bottom: 60px;
+        }
+
+        .initiatives-eyebrow {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #999;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .initiatives-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .initiatives-heading {
+            font-size: clamp(36px, 4vw, 48px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            font-weight: 800;
+            color: #000;
+            margin: 0;
+        }
+
+        /* Featured Card */
+        .featured-card {
+            display: flex;
+            background: #fff;
+            border-radius: 32px;
+            overflow: hidden;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            min-height: 400px;
+        }
+
+        .featured-img-col {
+            width: 50%;
+            position: relative;
+        }
+
+        .featured-img-col img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-text-col {
+            width: 50%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-meta {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #999;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .featured-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #000;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .featured-desc {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .featured-impact {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        /* Small Cards Grid */
+        .initiatives-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .initiative-card {
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .initiative-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .initiative-img {
+            height: 220px;
+            position: relative;
+        }
+
+        .initiative-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .initiative-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #ffca05;
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .initiative-content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .initiative-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .initiative-desc {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .initiative-link {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #000;
+            text-decoration: none;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        @media (max-width: 1024px) {
+            .featured-card {
+                flex-direction: column;
+            }
+
+            .featured-img-col,
+            .featured-text-col {
+                width: 100%;
+            }
+
+            .featured-img-col {
+                height: 300px;
+            }
+
+            .initiatives-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .initiatives-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-text-col {
+                padding: 40px 20px;
+            }
+        }
+
+        /* ===== ECOSYSTEM SECTION V2 ===== */
+        .ecosystem-section {
+            background: #080808;
+            color: #ffffff;
+            position: relative;
+            padding: 80px 0 0 0;
+            min-height: 700px;
+            overflow: hidden;
+            font-family: inherit;
+        }
+
+        .ecosystem-header {
+            padding: 0 52px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ecosystem-eyebrow {
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .ecosystem-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .ecosystem-heading {
+            font-size: clamp(32px, 4vw, 44px);
+            line-height: 1.05;
+            letter-spacing: -1px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .ecosystem-heading .yellow {
+            color: #ffca05;
+        }
+
+        .ecosystem-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto 0 auto;
+            aspect-ratio: 2 / 1;
+            min-height: 500px;
+        }
+
+        .eco-svg-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .eco-svg-bg path.conn-path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.08);
+            stroke-width: 1.5;
+            stroke-dasharray: 4 4;
+            transition: stroke 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.8s;
+        }
+
+        .eco-svg-bg .ring {
+            stroke: rgba(255, 255, 255, 0.04);
+            fill: none;
+            stroke-dasharray: 2 6;
+            animation: slow-spin 60s linear infinite;
+            transform-origin: 500px 250px;
+        }
+
+        @keyframes slow-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Active Path States */
+        .ecosystem-container[data-active="left"] .path-left {
+            stroke: rgba(255, 202, 5, 0.6);
+            filter: url(#soft-glow);
+        }
+
+        .ecosystem-container[data-active="right"] .path-right {
+            stroke: rgba(255, 202, 5, 0.6);
+            filter: url(#soft-glow);
+        }
+
+        .ecosystem-container[data-active="center"] path.conn-path {
+            stroke: rgba(255, 202, 5, 0.3);
+        }
+
+        /* SVG Particles */
+        .eco-particle {
+            opacity: 0.1;
+            transition: opacity 0.8s ease;
+        }
+
+        .ecosystem-container[data-active="left"] .particle-left {
+            opacity: 0.9;
+        }
+
+        .ecosystem-container[data-active="right"] .particle-right {
+            opacity: 0.9;
+        }
+
+        .ecosystem-container[data-active="center"] .eco-particle {
+            opacity: 0.5;
+        }
+
+        /* Nodes */
+        .eco-node {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #070707;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff;
+            cursor: pointer;
+            z-index: 5;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 0 0 rgba(255, 202, 5, 0);
+            outline: none;
+            padding: 0;
+        }
+
+        .eco-node:focus-visible {
+            border-color: #ffca05;
+            box-shadow: 0 0 0 2px #070707, 0 0 0 4px #ffca05;
+        }
+
+        .eco-node-left {
+            left: 20%;
+            width: 120px;
+            height: 120px;
+        }
+
+        .eco-node-center {
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            border-color: rgba(255, 202, 5, 0.4);
+        }
+
+        .eco-node-right {
+            left: 80%;
+            width: 120px;
+            height: 120px;
+        }
+
+        .eco-node-content {
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        /* Center Logo */
+        .eco-node-center .eco-logo-mark {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #ffca05;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.6s ease;
+        }
+
+        .eco-node-center .eco-logo-mark::before {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 22px;
+            background: #ffca05;
+            border-radius: 4px;
+            left: 14px;
+            top: 6px;
+        }
+
+        .eco-node-center .eco-logo-mark::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffca05;
+            border-radius: 50%;
+            left: 26px;
+            top: 4px;
+        }
+
+        /* Hover/Active States */
+        .eco-node.active,
+        .eco-node:hover {
+            border-color: #ffca05;
+            box-shadow: 0 0 30px rgba(255, 202, 5, 0.4), inset 0 0 15px rgba(255, 202, 5, 0.1);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .eco-node.active .eco-logo-mark,
+        .eco-node:hover .eco-logo-mark {
+            box-shadow: 0 0 20px rgba(255, 202, 5, 0.6);
+        }
+
+        /* Info Card */
+        .eco-info-card {
+            position: absolute;
+            right: 52px;
+            bottom: 20px;
+            width: 375px;
+            min-height: 72px;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 16px 24px;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 10;
+        }
+
+        .eco-info-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .eco-info-title {
+            color: #ffca05;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .eco-info-desc {
+            color: #cccccc;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .yellow-footer-transition {
+            background: #ffca05;
+            height: 100px;
+            border-radius: 40px 40px 0 0;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 900px) {
+            .ecosystem-container {
+                height: auto;
+                aspect-ratio: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+                padding: 40px 0;
+            }
+
+            .eco-svg-bg {
+                display: none;
+            }
+
+            .eco-node {
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+            }
+
+            .eco-node.active,
+            .eco-node:hover {
+                transform: scale(1.05);
+            }
+
+            .eco-info-card {
+                position: relative;
+                right: auto;
+                bottom: auto;
+                width: calc(100% - 40px);
+                margin: 0 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .eco-svg-bg .ring {
+                animation: none;
+            }
+
+            .eco-particle {
+                display: none;
+            }
+
+            .eco-node.active,
+            .eco-node:hover {
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        /* ===== ECOSYSTEM SECTION V2 ===== */
+        .ecosystem-section {
+            background: #080808;
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            padding: 80px 0 0 0;
+            min-height: 700px;
+            overflow: hidden;
+            font-family: inherit;
+        }
+
+        .ecosystem-header {
+            padding: 0 52px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ecosystem-eyebrow {
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .ecosystem-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .ecosystem-heading {
+            font-size: clamp(32px, 4vw, 44px);
+            line-height: 1.05;
+            letter-spacing: -1px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .ecosystem-heading .yellow {
+            color: #ffca05;
+        }
+
+        .ecosystem-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto 0 auto;
+            aspect-ratio: 2 / 1;
+            min-height: 500px;
+        }
+
+        .eco-svg-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .eco-svg-bg path.conn-path {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.08);
+            stroke-width: 1.5;
+            stroke-dasharray: 4 4;
+            transition: stroke 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.8s;
+        }
+
+        .eco-svg-bg .ring {
+            stroke: rgba(255, 255, 255, 0.04);
+            fill: none;
+            stroke-dasharray: 2 6;
+            animation: slow-spin 60s linear infinite;
+            transform-origin: 500px 250px;
+        }
+
+        @keyframes slow-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Active Path States */
+        .ecosystem-container[data-active="left"] .path-left {
+            stroke: rgba(255, 202, 5, 0.6);
+            filter: url(#soft-glow);
+        }
+
+        .ecosystem-container[data-active="right"] .path-right {
+            stroke: rgba(255, 202, 5, 0.6);
+            filter: url(#soft-glow);
+        }
+
+        .ecosystem-container[data-active="center"] path.conn-path {
+            stroke: rgba(255, 202, 5, 0.3);
+        }
+
+        /* SVG Particles */
+        .eco-particle {
+            opacity: 0.1;
+            transition: opacity 0.8s ease;
+        }
+
+        .ecosystem-container[data-active="left"] .particle-left {
+            opacity: 0.9;
+        }
+
+        .ecosystem-container[data-active="right"] .particle-right {
+            opacity: 0.9;
+        }
+
+        .ecosystem-container[data-active="center"] .eco-particle {
+            opacity: 0.5;
+        }
+
+        /* Nodes */
+        .eco-node {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #070707;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff;
+            cursor: pointer;
+            z-index: 5;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 0 0 rgba(255, 202, 5, 0);
+            outline: none;
+            padding: 0;
+        }
+
+        .eco-node:focus-visible {
+            border-color: #ffca05;
+            box-shadow: 0 0 0 2px #070707, 0 0 0 4px #ffca05;
+        }
+
+        .eco-node-left {
+            left: 20%;
+            width: 120px;
+            height: 120px;
+        }
+
+        .eco-node-center {
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            border-color: rgba(255, 202, 5, 0.4);
+        }
+
+        .eco-node-right {
+            left: 80%;
+            width: 120px;
+            height: 120px;
+        }
+
+        .eco-node-content {
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        /* Center Logo */
+        .eco-node-center .eco-logo-mark {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #ffca05;
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.6s ease;
+        }
+
+        .eco-node-center .eco-logo-mark::before {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 22px;
+            background: #ffca05;
+            border-radius: 4px;
+            left: 14px;
+            top: 6px;
+        }
+
+        .eco-node-center .eco-logo-mark::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffca05;
+            border-radius: 50%;
+            left: 26px;
+            top: 4px;
+        }
+
+        /* Hover/Active States */
+        .eco-node.active,
+        .eco-node:hover {
+            border-color: #ffca05;
+            box-shadow: 0 0 30px rgba(255, 202, 5, 0.4), inset 0 0 15px rgba(255, 202, 5, 0.1);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .eco-node.active .eco-logo-mark,
+        .eco-node:hover .eco-logo-mark {
+            box-shadow: 0 0 20px rgba(255, 202, 5, 0.6);
+        }
+
+        /* Info Card */
+        .eco-info-card {
+            position: absolute;
+            right: 52px;
+            bottom: 20px;
+            width: 375px;
+            min-height: 72px;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 16px 24px;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 10;
+        }
+
+        .eco-info-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .eco-info-title {
+            color: #ffca05;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .eco-info-desc {
+            color: #cccccc;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .yellow-footer-transition {
+            background: #ffca05;
+            height: 100px;
+            border-radius: 40px 40px 0 0;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 900px) {
+            .ecosystem-container {
+                height: auto;
+                aspect-ratio: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+                padding: 40px 0;
+            }
+
+            .eco-svg-bg {
+                display: none;
+            }
+
+            .eco-node {
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+            }
+
+            .eco-node.active,
+            .eco-node:hover {
+                transform: scale(1.05);
+            }
+
+            .eco-info-card {
+                position: relative;
+                right: auto;
+                bottom: auto;
+                width: calc(100% - 40px);
+                margin: 0 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .eco-svg-bg .ring {
+                animation: none;
+            }
+
+            .eco-particle {
+                display: none;
+            }
+
+            .eco-node.active,
+            .eco-node:hover {
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        /* ===== IMPACT SECTION (05) ===== */
+        .impact-section {
+            background: #ffca05;
+            color: #000000;
+            padding: 100px 10% 160px 10%;
+            border-radius: 60px 60px 0 0;
+            position: relative;
+            z-index: 2;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.04);
+        }
+
+        .impact-eyebrow {
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .impact-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #000000;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .impact-heading {
+            font-size: clamp(36px, 4vw, 48px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            font-weight: 800;
+            margin-bottom: 60px;
+        }
+
+        .impact-stats-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .impact-stat {
+            flex: 1;
+            min-width: 140px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+        }
+
+        .impact-stat-number {
+            font-size: clamp(32px, 3.5vw, 48px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .impact-stat-label {
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .impact-disclaimer {
+            font-size: 9px;
+            letter-spacing: 2px;
+            font-family: monospace;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        /* ===== DARK IMPACT STORIES SECTION ===== */
+        .dark-stories-section {
+            background: #111;
+            color: #ffffff;
+            padding: 100px 10% 120px 10%;
+            border-radius: 60px 60px 0 0;
+            position: relative;
+            z-index: 3;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-stories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 20px;
+            margin-bottom: 60px;
+        }
+
+        .dark-stories-title {
+            font-family: Georgia, serif;
+            font-size: clamp(32px, 4vw, 44px);
+            font-weight: normal;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .dark-stories-eyebrow {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #d8913b;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 8px;
+            /* align appropriately */
+        }
+
+        .dark-stories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .dark-card {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .dark-card:hover .dark-card-img img {
+            transform: scale(1.03);
+        }
+
+        .dark-card-img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .dark-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .dark-card-cat {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #d8913b;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .dark-card-title {
+            font-family: Georgia, serif;
+            font-size: 20px;
+            font-weight: normal;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .dark-card-desc {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        /* ===== REAL STORIES SECTION (06) ===== */
+        .stories-section {
+            background: #ffffff;
+            color: #000000;
+            padding: 100px 10% 140px 10%;
+            border-radius: 60px 60px 0 0;
+            position: relative;
+            z-index: 4;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.04);
+            min-height: 400px;
+        }
+
+        .stories-eyebrow {
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .stories-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .stories-heading {
+            font-size: clamp(36px, 4vw, 48px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            font-weight: 800;
+            margin-bottom: 60px;
+        }
+
+        .stories-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        /* Featured Story */
+        .featured-story-card {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .story-video-container {
+            position: relative;
+            width: 100%;
+            border-radius: 40px;
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+        }
+
+        .story-video-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: #ffca05;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .story-play-btn:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .story-play-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #000;
+            margin-left: 4px;
+        }
+
+        .story-content-wrap {
+            padding-right: 20px;
+        }
+
+        .story-meta-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .story-meta-label {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        .story-badge {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #999;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 4px 10px;
+            margin-left: 12px;
+            text-transform: uppercase;
+        }
+
+        .story-title-large {
+            font-size: clamp(32px, 3vw, 44px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            color: #000;
+        }
+
+        .story-meta-details {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+            font-family: monospace;
+        }
+
+        .story-quote {
+            border-left: 3px solid #ffca05;
+            padding-left: 24px;
+            font-size: clamp(16px, 2vw, 20px);
+            line-height: 1.5;
+            color: #333;
+            margin: 0 0 32px 0;
+        }
+
+        .story-desc {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 90%;
+        }
+
+        /* Secondary Stories */
+        .secondary-stories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .secondary-card {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .secondary-card:hover .secondary-img img {
+            transform: scale(1.03);
+        }
+
+        .secondary-img {
+            width: 100%;
+            aspect-ratio: 3 / 2;
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .secondary-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .secondary-title {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            color: #000;
+            line-height: 1.3;
+        }
+
+        .secondary-meta {
+            font-size: 9px;
+            font-family: monospace;
+            letter-spacing: 2px;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        /* ===== APPROACH SECTION (07) ===== */
+        .approach-section {
+            background: #fafafa;
+            color: #000;
+            padding: 100px 10%;
+            position: relative;
+            z-index: 5;
+            border-radius: 60px 60px 0 0;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.04);
+            min-height: 400px;
+        }
+
+        .approach-eyebrow {
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .approach-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .approach-heading {
+            font-size: clamp(36px, 4vw, 48px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            font-weight: 800;
+            margin-bottom: 100px;
+        }
+
+        .approach-timeline {
+            position: relative;
+            width: 100%;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 13px;
+            /* Centers with dot */
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ffca05;
+            z-index: 1;
+        }
+
+        .timeline-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-step {
+            flex: 1;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .timeline-dot-wrapper {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            box-shadow: 0 0 0 10px #fafafa;
+            /* Fake padding over the line */
+        }
+
+        .timeline-dot-wrapper .timeline-dot {
+            width: 12px;
+            height: 12px;
+            background: #ffca05;
+            border-radius: 50%;
+        }
+
+        .step-num {
+            font-family: monospace;
+            font-size: 10px;
+            color: #999;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .step-desc {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        /* ===== PEOPLE BEHIND IMPACT SECTION ===== */
+        .people-impact-section {
+            background: #f4f3ec;
+            color: #111;
+            padding: 120px 10%;
+            position: relative;
+            z-index: 6;
+            border-radius: 60px 60px 0 0;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.04);
+        }
+
+        .people-grid {
+            display: grid;
+            grid-template-columns: 35% 1fr;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        .people-text-col {
+            padding-right: 40px;
+        }
+
+        .people-title {
+            font-family: Georgia, serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: normal;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: #0b1320;
+        }
+
+        .people-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .people-cards-col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .people-card {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .people-placeholder {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            background: #eae9e2;
+            border: 1px dashed #ccc;
+            margin-bottom: 20px;
+        }
+
+        .people-image {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            background: #f3f1eb;
+        }
+
+        .people-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .people-cat {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #d8913b;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .people-subtext {
+            font-size: 11px;
+            color: #777;
+            line-height: 1.4;
+        }
+
+        /* ===== DONATE SECTION (09) ===== */
+        .donate-section {
+            background: #0a0a0a;
+            color: #fff;
+            padding: 120px 10%;
+            position: relative;
+            z-index: 7;
+            border-radius: 60px 60px 0 0;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.2);
+            min-height: 500px;
+        }
+
+        .donate-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .donate-eyebrow {
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .donate-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .donate-heading {
+            font-size: clamp(36px, 4vw, 52px);
+            line-height: 1.1;
+            letter-spacing: -2px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .donate-heading .yellow {
+            color: #ffca05;
+        }
+
+        .donate-desc {
+            font-size: 14px;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 90%;
+        }
+
+        .donate-features {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .donate-feature {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .donate-feature-icon {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255, 202, 5, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffca05;
+            flex-shrink: 0;
+        }
+
+        .donate-feature-icon svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .donate-feature-text {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* Donate Widget */
+        .donate-widget {
+            background: #141414;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 40px;
+        }
+
+        .donate-toggle {
+            display: flex;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 4px;
+            margin-bottom: 40px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .toggle-btn.active {
+            background: #ffca05;
+            color: #000;
+        }
+
+        .toggle-btn:not(.active) {
+            color: #777;
+        }
+
+        .donate-amounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .amount-btn {
+            flex: 1 1 auto;
+            min-width: 80px;
+            padding: 14px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: #fff;
+            text-align: center;
+        }
+
+        .amount-btn.active {
+            background: #ffca05;
+            color: #000;
+            border-color: #ffca05;
+        }
+
+        .custom-amount-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-width: 130px;
+            width: 130px;
+            padding: 0 18px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.02);
+            color: #fff;
+            transition: all 0.35s ease;
+            overflow: hidden;
+            transform-origin: center;
+        }
+
+        .custom-amount-wrap.active {
+            background: #ffca05;
+            border-color: #ffca05;
+            color: #000;
+            width: 180px;
+            box-shadow: 0 12px 25px rgba(255, 202, 5, 0.22);
+        }
+
+        .currency-prefix {
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1;
+            color: inherit;
+            margin-right: 4px;
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .custom-amount {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 14px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .custom-amount::placeholder {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .custom-amount-wrap.active .custom-amount::placeholder {
+            color: rgba(0, 0, 0, 0.65);
+        }
+
+        input[type="number"].amount-btn::-webkit-inner-spin-button,
+        input[type="number"].amount-btn::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"].amount-btn {
+            -moz-appearance: textfield;
+            outline: none;
+        }
+
+        .donate-submit {
+            width: 100%;
+            background: #ffca05;
+            color: #000;
+            border: none;
+            padding: 18px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .donate-submit:hover {
+            transform: scale(1.02);
+        }
+
+        .donate-submit svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        .donate-disclaimer {
+            font-family: monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: #666;
+            text-align: center;
+            text-transform: uppercase;
+            line-height: 1.5;
+        }
+
+        /* ===== BE A PART SECTION (10) ===== */
+        .be-a-part-section {
+            background: #ffca05;
+            color: #000;
+            padding: 80px 10%;
+            position: relative;
+            z-index: 8;
+            border-radius: 60px 60px 0 0;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.04);
+        }
+
+        .part-eyebrow {
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .part-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #000;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .part-heading {
+            font-size: clamp(28px, 3vw, 40px);
+            line-height: 1.1;
+            letter-spacing: -1px;
+            font-weight: 800;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .part-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .part-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+            margin: 0 -40px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .part-item:hover {
+            background: #0a0a0a;
+            border-top-color: transparent;
+        }
+
+        .part-item:hover+.part-item {
+            border-top-color: transparent;
+        }
+
+        .part-item:last-child {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .part-item:last-child:hover {
+            border-bottom-color: transparent;
+        }
+
+        .part-num {
+            font-family: monospace;
+            font-size: 10px;
+            color: rgba(0, 0, 0, 0.5);
+            margin-right: 20px;
+            width: 20px;
+            transition: opacity 0.3s;
+        }
+
+        .part-item:hover .part-num {
+            opacity: 0;
+        }
+
+        .part-title {
+            font-size: clamp(24px, 3.5vw, 48px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .part-item:hover .part-title {
+            color: #ffca05;
+        }
+
+        .part-arrow {
+            margin-left: auto;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ffca05;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffca05;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .part-arrow svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .part-item:hover .part-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ===== MODAL ===== */
+        .join-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .join-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .join-modal {
+            background: #fff;
+            width: 90%;
+            max-width: 440px;
+            border-radius: 32px;
+            padding: 40px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            color: #000;
+        }
+
+        .join-modal-overlay.active .join-modal {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #000;
+            transition: background 0.2s;
+            border: none;
+        }
+
+        .modal-close:hover {
+            background: #e0e0e0;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            padding-right: 40px;
+        }
+
+        .modal-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 16px 24px;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .modal-input:focus {
+            border-color: #ffca05;
+        }
+
+        .modal-submit {
+            width: 100%;
+            background: #0a0a0a;
+            color: #ffca05;
+            border: none;
+            padding: 18px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .modal-submit:hover {
+            transform: scale(1.02);
+        }
+
+        /* ===== ACCOUNTABILITY SECTION (11) ===== */
+        .accountability-section {
+            background: #ffffff;
+            color: #000;
+            padding: 120px 10%;
+            position: relative;
+            z-index: 9;
+            border-radius: 60px 60px 0 0;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .acc-eyebrow {
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: #888;
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .acc-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .acc-heading {
+            font-size: clamp(36px, 4vw, 52px);
+            line-height: 1.1;
+            letter-spacing: -2px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .acc-heading .grey {
+            color: #aaa;
+        }
+
+        .acc-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            max-width: 500px;
+            margin-bottom: 60px;
+        }
+
+        .acc-list-container {
+            border: 1px solid #ebebeb;
+            border-radius: 24px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .acc-item {
+            display: flex;
+            align-items: center;
+            padding: 24px 32px;
+            border-bottom: 1px solid #ebebeb;
+            transition: background 0.3s ease;
+        }
+
+        .acc-item:last-child {
+            border-bottom: none;
+        }
+
+        .acc-item:hover {
+            background: #fafafa;
+        }
+
+        .acc-icon {
+            width: 40px;
+            height: 40px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 24px;
+            flex-shrink: 0;
+            color: #333;
+        }
+
+        .acc-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .acc-content {
+            flex: 1;
+        }
+
+        .acc-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #111;
+        }
+
+        .acc-subtext {
+            font-family: monospace;
+            font-size: 10px;
+            color: #999;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .acc-download {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 10px;
+            font-family: monospace;
+            font-weight: 700;
+            color: #555;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .acc-download:hover {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        /* ===== FINAL CTA SECTION (12) ===== */
+        .final-cta-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://assets.sutori.com/user-uploads/image/7c5e1929-b07c-4aa6-9309-1b1bb0c9d2f9/81a6abc1-24d5-4282-81df-4cb88e39cba8.jpeg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 180px 10%;
+            position: relative;
+            z-index: 10;
+            border-radius: 60px 60px 0 0;
+            margin-top: -60px;
+            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        .final-cta-heading {
+            font-size: clamp(36px, 5vw, 64px);
+            line-height: 1.1;
+            letter-spacing: -2px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            max-width: 800px;
+        }
+
+        .final-cta-heading .yellow {
+            color: #ffca05;
+        }
+
+        .final-cta-desc {
+            font-size: 14px;
+            color: #e0e0e0;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .final-cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .final-cta-btn-primary {
+            background: #ffca05;
+            color: #000;
+            padding: 18px 36px;
+            border-radius: 30px;
+            font-family: monospace;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            border: 1px solid #ffca05;
+        }
+
+        .final-cta-btn-primary:hover {
+            transform: scale(1.05);
+        }
+
+        .final-cta-btn-secondary {
+            background: transparent;
+            color: #fff;
+            padding: 18px 36px;
+            border-radius: 30px;
+            font-family: monospace;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid #ffca05;
+        }
+
+        .final-cta-btn-secondary:hover {
+            background: rgba(255, 202, 5, 0.1);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 900px) {
+            .acc-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .acc-download {
+                align-self: flex-start;
+            }
+
+            .donate-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .people-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .people-cards-col {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .timeline-steps {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .timeline-line {
+                width: 2px;
+                height: 100%;
+                top: 0;
+                left: 13px;
+            }
+
+            .timeline-step {
+                padding-left: 50px;
+                padding-right: 0;
+            }
+
+            .timeline-dot-wrapper {
+                position: absolute;
+                left: 0;
+                margin-bottom: 0;
+            }
+
+            .impact-stats-row {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .featured-story-card {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .secondary-stories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dark-stories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dark-stories-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .secondary-stories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== FOOTER SECTION ===== */
+        .site-footer {
+            background: #111;
+            color: #fff;
+            padding: 80px 10% 40px 10%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-top {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #ffca05;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        .footer-top .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-col-main {
+            padding-right: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .footer-logo-mark {
+            width: 45px;
+            height: 45px;
+            border: 3px solid #ffca05;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .footer-logo-mark::before {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 22px;
+            background: #ffca05;
+            border-radius: 8px;
+            left: 16px;
+            top: 8px;
+            transform: rotate(28deg);
+        }
+
+        .footer-logo-mark::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffca05;
+            border-radius: 50%;
+            left: 28px;
+            top: 4px;
+        }
+
+        .footer-logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-logo-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .footer-logo-sub {
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ccc;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .footer-trust-type {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #777;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .footer-tagline {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffca05;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-col-nav h4 {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #ffca05;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .footer-col-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-col-nav ul li {
+            margin-bottom: 16px;
+        }
+
+        .footer-col-nav ul li a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col-nav ul li a:hover {
+            color: #ffca05;
+        }
+
+        @media (max-width: 900px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .footer-col-main {
+                padding-right: 0;
+            }
+        }
+    
+
+.eco-node-logo-wrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #080808;
+}
+.eco-node-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.8);
+}
+
+
+.eco-info-card {
+    display: none !important;
+}
+
+/* ===== GLOBAL RESPONSIVE OPTIMIZATIONS ===== */
+@media (max-width: 900px) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+        padding-bottom: 60px;
+    }
+    .hero-content {
+        padding-top: 150px;
+    }
+}
+@media (max-width: 480px) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+        padding-bottom: 50px;
+    }
+    .hero-content {
+        padding-top: 120px;
+    }
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+    z-index: 100;
+}
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: #ffca05;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 1200px) {
+    .content-section, .founder-section, .our-work-section, .initiatives-section { padding-left: 5%; padding-right: 5%; }
+    .hero-content { margin-left: 5%; width: 55vw; }
+}
+
+@media (max-width: 900px) {
+    /* Navbar */
+    .navbar { padding: 0 5%; }
+    .hamburger { display: flex; }
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100vh;
+        background: #080808;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 40;
+    }
+    .nav-links.active { left: 0; }
+    .navbar.scrolled .nav-links { background: #ffffff; }
+    .navbar.scrolled .nav-links a { color: #000; font-size: 16px; }
+    .nav-links a { font-size: 16px; }
+    .nav-indicator { display: none; }
+    
+    /* Layouts */
+    .layout-grid, .founder-grid { grid-template-columns: 1fr; gap: 50px; }
+    .hero-content { width: 90%; padding-top: 20vh; }
+    h1 { font-size: clamp(40px, 8vw, 60px); }
+    .image-reveal-container { height: 50vh; }
+    .full-width-image { height: 50vh; margin-top: 50px; }
+    
+    .initiatives-grid { grid-template-columns: 1fr; }
+    
+    /* Founder Image Fixes */
+    .founder-image-col { max-width: 400px; }
+}
+
+@media (max-width: 768px) {
+    /* Actions */
+    .actions { flex-direction: column; align-items: flex-start; width: 100%; }
+    .actions .btn { width: 100%; max-width: 350px; }
+    
+    /* Typography */
+    .marquee-content { font-size: 20px; }
+    .marquee-content span.yellow-plus { margin: 0 20px; }
+    .founder-heading, .our-work-heading { font-size: clamp(32px, 6vw, 40px); }
+    
+    /* Sections */
+    .content-section { padding-top: 80px; padding-bottom: 80px; }
+    .founder-section, .our-work-section, .initiatives-section { padding-top: 80px; padding-bottom: 80px; }
+    
+    .our-work-title-row { flex-direction: column; align-items: flex-start; gap: 15px; }
+}
+
+@media (max-width: 480px) {
+    .navbar { padding: 0 15px; height: 70px; }
+    .logo-placeholder img { height: 35px !important; }
+    .donate { width: 85px; height: 32px; font-size: 8px; }
+    
+    .hero-content { padding-top: 15vh; }
+    h1 { font-size: 36px; letter-spacing: -1px; margin-bottom: 20px; }
+    .description { font-size: 15px; margin-bottom: 25px; }
+    
+    .founder-heading, .our-work-heading { font-size: 28px; }
+    .quote-text { font-size: 16px; }
+    .founder-image-col { max-width: 100%; }
+    .yellow-circle { width: 150px; height: 150px; top: -20px; left: -20px; }
+    .black-circle { width: 80px; height: 80px; bottom: -20px; right: -20px; }
+    
+    .image-reveal-container { height: 40vh; }
+    .full-width-image { height: 40vh; margin-top: 30px; }
+    
+    .work-grid { grid-template-columns: 1fr; }
+    .card-large, .card-wide { grid-column: span 1; grid-row: span 1; }
+}
+
+</style>
+</head>
+
+<body>
+
+    <section class="hero" id="home">
+        <header class="navbar">
+            <div class="logo-placeholder">
+                <img src="svg.svg" alt="Meridian Foundation Trust" style="height: 48px; width: auto;" />
+            </div>
+            <nav class="nav-links">
+                <span class="nav-indicator" aria-hidden="true"></span>
+                <a href="#home" class="active">HOME</a>
+                <a href="#about">ABOUT</a>
+                <a href="#our-work">OUR WORK</a>
+                <a href="#impact">IMPACT</a>
+            </nav>
+            <a class="donate" href="#donate">DONATE</a>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <main class="hero-content">
+            <div class="eyebrow gsap-fade-up">MERIDIAN TRUST — FOUNDATION FOR CHANGE</div>
+            <h1>
+                <span class="gsap-title-line">Building opportunity.</span>
+                <span class="yellow gsap-title-line">Creating impact.</span>
+                <span class="gsap-title-line">Shaping tomorrow.</span>
+            </h1>
+            <p class="description gsap-fade-up">
+                Meridian Trust exists to widen the circle of opportunity — supporting
+                education, skills and community-led change, and building pathways
+                for people to shape their own futures.
+            </p>
+            <div class="actions gsap-fade-up">
+                <a class="btn btn-primary" href="explore.html">EXPLORE OUR IMPACT</a>
+                <a class="btn btn-secondary" href="#donate">SUPPORT OUR MISSION</a>
+            </div>
+        </main>
+    </section>
+
+    <div class="marquee-wrapper">
+        <div class="marquee-content">
+            OPPORTUNITY <span class="yellow-plus">+</span> DIGNITY <span class="yellow-plus">+</span> IMPACT <span
+                class="yellow-plus">+</span> EDUCATION <span class="yellow-plus">+</span> SKILLS <span
+                class="yellow-plus">+</span> COMMUNITY <span class="yellow-plus">+</span>
+            OPPORTUNITY <span class="yellow-plus">+</span> DIGNITY <span class="yellow-plus">+</span> IMPACT <span
+                class="yellow-plus">+</span> EDUCATION <span class="yellow-plus">+</span> SKILLS <span
+                class="yellow-plus">+</span> COMMUNITY <span class="yellow-plus">+</span>
+        </div>
+    </div>
+
+    <!-- NEW: Advanced Scroll Animation Layout -->
+    <section class="content-section">
+
+        <div class="layout-grid">
+            <div class="text-block">
+                <h2 class="gsap-text-reveal">A vision built around opportunity and growth.</h2>
+                <p class="gsap-fade-up-scroll">Meridian Trust works to widen access to learning, livelihood opportunity,
+                    and community-led growth for people whose potential is often overlooked by the system.</p>
+            </div>
+
+            <!-- Image Reveal 1 -->
+            <div class="image-reveal-container js-image-reveal">
+                <img src="indian_children_outdoor_1790095586676.jpg" alt="Team collaborating" class="js-parallax-img">
+            </div>
+        </div>
+
+        <!-- Image Reveal 2 (Full Width) -->
+        <div class="image-reveal-container full-width-image js-image-reveal">
+            <img src="indian_children_community_1790095516040.jpg" alt="Community" class="js-parallax-img">
+        </div>
+
+    </section>
+
+    <!-- NEW: Founder Section -->
+    <section class="founder-section" id="about">
+        <div class="founder-grid">
+
+            <!-- Left: Image & Decorations -->
+            <div class="founder-image-col gsap-fade-up-scroll">
+                <div class="yellow-circle"></div>
+                <img src="gg.jpeg" alt="Founder" class="founder-img">
+                <div class="black-circle"></div>
+            </div>
+
+            <!-- Right: Text Content -->
+            <div class="founder-text-col">
+                <div class="founder-eyebrow gsap-fade-up-scroll">
+                    <span class="dot"></span> <span style="color:#ffca05">01</span> &nbsp;&mdash;&nbsp; THE FOUNDER
+                </div>
+
+                <h2 class="founder-heading gsap-text-reveal">A vision built around opportunity.</h2>
+
+                <div class="quote-icon gsap-fade-up-scroll">“</div>
+                <p class="quote-text gsap-fade-up-scroll">
+                    Opportunity should never depend on where a person is born. Our work begins the moment we decide it
+                    can be built — deliberately, patiently, and together.
+                </p>
+
+                <div class="founder-meta gsap-fade-up-scroll">
+                    FOUNDER'S VISION &mdash; MERIDIAN TRUST
+                </div>
+
+                <p class="founder-bio gsap-fade-up-scroll">
+                    This space carries the founder's story — the origin of the trust, the philosophy behind it, and the
+                    vision that guides every program. The full biography will be published here once final content is
+                    confirmed.
+                </p>
+
+                <a href="#about" class="founder-link gsap-fade-up-scroll">
+                    READ THE FOUNDER'S STORY
+                    <span class="arrow-btn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NEW: Our Work Section -->
+    <section class="our-work-section" id="our-work">
+        <div class="our-work-header gsap-fade-up-scroll">
+            <div class="our-work-eyebrow">
+                <span class="dot"></span> <span style="color:#ffca05">02</span> &nbsp;&mdash;&nbsp; OUR WORK
+            </div>
+            <div class="our-work-title-row">
+                <h2 class="our-work-heading">Turning purpose into<br>meaningful action.</h2>
+                <p class="our-work-sub">Six connected areas of work &mdash; each one a pathway from<br>intention to
+                    measurable change.</p>
+            </div>
+        </div>
+
+        <div class="work-grid">
+            <!-- Card 1 -->
+            <div class="work-card card-large gsap-fade-up-scroll">
+                <img src="indian_children_education_1790095446949.jpg" alt="Education">
+                <div class="card-overlay"></div>
+                <div class="card-number">01</div>
+                <div class="card-content">
+                    <h3 class="card-title">Education</h3>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="work-card gsap-fade-up-scroll">
+                <img src="indian_youth_skills_1790095480885.jpg" alt="Skills & Employability">
+                <div class="card-overlay"></div>
+                <div class="card-number">02</div>
+                <div class="card-content">
+                    <h3 class="card-title">Skills &<br>Employability</h3>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="work-card gsap-fade-up-scroll">
+                <img src="indian_children_community_1790095516040.jpg" alt="Community Development">
+                <div class="card-overlay"></div>
+                <div class="card-number">03</div>
+                <div class="card-content">
+                    <h3 class="card-title">Community<br>Development</h3>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="work-card gsap-fade-up-scroll">
+                <img src="indian_children_outdoor_1790095586676.jpg" alt="Youth Development">
+                <div class="card-overlay"></div>
+                <div class="card-number">04</div>
+                <div class="card-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17L17 7M7 7h10v10" />
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Youth Development</h3>
+                    <p class="card-desc">Confidence, exposure and<br>leadership for young people.</p>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="work-card gsap-fade-up-scroll">
+                <img src="indian_child_tech_1790095546513.jpg" alt="Social Impact">
+                <div class="card-overlay"></div>
+                <div class="card-number">05</div>
+                <div class="card-content">
+                    <h3 class="card-title">Social Impact</h3>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="work-card card-wide gsap-fade-up-scroll">
+                <img src="indian_classroom_learning_1790095619380.jpg" alt="Innovation">
+                <div class="card-overlay"></div>
+                <div class="card-number">06</div>
+                <div class="card-content">
+                    <h3 class="card-title">Innovation</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Initiatives Section -->
+    <section class="initiatives-section">
+        <div class="initiatives-header gsap-fade-up-scroll">
+            <div class="initiatives-eyebrow">
+                <span class="dot"></span> <span style="color:#ffca05">03</span> &nbsp;&mdash;&nbsp; OUR INITIATIVES
+            </div>
+            <h2 class="initiatives-heading">From ideas to action.</h2>
+        </div>
+
+        <!-- Featured Card -->
+        <div class="featured-card gsap-fade-up-scroll">
+            <div class="featured-img-col">
+                <div class="initiative-number"
+                    style="position:absolute;top:20px;left:20px;background:#ffca05;color:#000;font-size:10px;font-weight:800;padding:4px 10px;border-radius:12px;z-index:10;">
+                    01</div>
+                <img src="m 1.jpeg" alt="Learning Access Initiative">
+            </div>
+            <div class="featured-text-col">
+                <div class="featured-meta">
+                    FLAGSHIP INITIATIVE
+                </div>
+                <h3 class="featured-title">Learning Access Initiative</h3>
+                <p class="featured-desc">
+                    Our flagship effort brings quality learning closer to underserved communities — combining educators,
+                    infrastructure and community ownership to create more equitable access to opportunity.
+                </p>
+                <div class="featured-impact">
+                    IMPACT &mdash; ACCESS TO QUALITY LEARNING
+                </div>
+                <a href="#" class="founder-link">
+                    EXPLORE
+                    <span class="arrow-btn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Initiatives Grid -->
+        <div class="initiatives-grid">
+
+            <!-- Card 2 -->
+            <div class="initiative-card gsap-fade-up-scroll">
+                <div class="initiative-img">
+                    <img src="indian_youth_skills_1790095480885.jpg" alt="Skills & Livelihood Program">
+                    <div class="initiative-number">02</div>
+                </div>
+                <div class="initiative-content">
+                    <h4 class="initiative-title">Skills & Livelihood Program</h4>
+                    <p class="initiative-desc">Hands-on training pathways that connect learning to income and practical
+                        work readiness.</p>
+                    <div>
+                        <a href="explore.html" class="initiative-link">EXPLORE &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="initiative-card gsap-fade-up-scroll">
+                <div class="initiative-img">
+                    <img src="indian_classroom_learning_1790095619380.jpg" alt="Youth Leadership Program">
+                    <div class="initiative-number">03</div>
+                </div>
+                <div class="initiative-content">
+                    <h4 class="initiative-title">Youth Leadership Program</h4>
+                    <p class="initiative-desc">Mentorship and exposure that help young people build confidence and lead
+                        within their communities.</p>
+                    <div>
+                        <a href="explore.html" class="initiative-link">EXPLORE &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="initiative-card gsap-fade-up-scroll">
+                <div class="initiative-img">
+                    <img src="indian_child_tech_1790095546513.jpg" alt="Community Technology Access">
+                    <div class="initiative-number">04</div>
+                </div>
+                <div class="initiative-content">
+                    <h4 class="initiative-title">Community Technology Access</h4>
+                    <p class="initiative-desc">Bringing tools, connectivity and digital confidence closer to home for
+                        everyday learning and growth.</p>
+                    <div>
+                        <a href="explore.html" class="initiative-link">EXPLORE &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NEW: Ecosystem Section V2 -->
+    <section class="ecosystem-section" id="ecosystem">
+        <div class="ecosystem-header gsap-fade-up-scroll">
+            <div class="ecosystem-eyebrow">
+                <span class="dot"></span> 04 &mdash; THE MERIDIAN ECOSYSTEM
+            </div>
+            <h2 class="ecosystem-heading">
+                One vision. <span class="yellow">Multiple</span><br>
+                <span class="yellow">pathways</span> to impact.
+            </h2>
+        </div>
+
+        <div class="ecosystem-container gsap-fade-up-scroll">
+
+            <svg class="eco-svg-bg" viewBox="0 0 1000 500" preserveAspectRatio="none">
+                <defs>
+                    <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+
+                    <!-- SVG Paths mapping node positions: (200,250) -> (500,250) -> (800,250) -->
+                    <path id="path-left-upper" d="M 200 250 C 275 100, 425 100, 500 250" />
+                    <path id="path-left-lower" d="M 200 250 C 275 400, 425 400, 500 250" />
+
+                    <path id="path-right-upper" d="M 500 250 C 575 100, 725 100, 800 250" />
+                    <path id="path-right-lower" d="M 500 250 C 575 400, 725 400, 800 250" />
+                </defs>
+
+                <!-- Orbital rings centered at (500,250) -->
+                <g class="orbital-rings">
+                    <circle cx="500" cy="250" r="120" class="ring" />
+                    <circle cx="500" cy="250" r="180" class="ring" />
+                    <circle cx="500" cy="250" r="260" class="ring" />
+                </g>
+
+                <!-- Dotted Connection Paths -->
+                <g class="eco-paths">
+                    <use href="#path-left-upper" class="conn-path path-left" />
+                    <use href="#path-left-lower" class="conn-path path-left" />
+                    <use href="#path-right-upper" class="conn-path path-right" />
+                    <use href="#path-right-lower" class="conn-path path-right" />
+                </g>
+
+                <!-- Animated Particles mapping paths -->
+                <circle r="3" fill="#ffca05" class="eco-particle particle-left" filter="url(#soft-glow)">
+                    <animateMotion dur="4s" repeatCount="indefinite">
+                        <mpath href="#path-left-upper" />
+                    </animateMotion>
+                </circle>
+                <circle r="3" fill="#ffca05" class="eco-particle particle-left" filter="url(#soft-glow)">
+                    <animateMotion dur="4.5s" repeatCount="indefinite" begin="1s">
+                        <mpath href="#path-left-lower" />
+                    </animateMotion>
+                </circle>
+
+                <circle r="3" fill="#ffca05" class="eco-particle particle-right" filter="url(#soft-glow)">
+                    <animateMotion dur="4s" repeatCount="indefinite">
+                        <mpath href="#path-right-upper" />
+                    </animateMotion>
+                </circle>
+                <circle r="3" fill="#ffca05" class="eco-particle particle-right" filter="url(#soft-glow)">
+                    <animateMotion dur="4.5s" repeatCount="indefinite" begin="1.5s">
+                        <mpath href="#path-right-lower" />
+                    </animateMotion>
+                </circle>
+            </svg>
+
+            <!-- Interactive HTML Nodes -->
+            <button class="eco-node eco-node-left" data-target="left" aria-label="Meridian AI International Academy">
+                <div class="eco-node-content">
+                    MERIDIAN AI<br>INTERNATIONAL<br>ACADEMY
+                </div>
+            </button>
+
+            <button class="eco-node eco-node-center" data-target="center" aria-label="The Parent Foundation">
+                <div class="eco-node-logo-wrapper">
+                    <img src="ecosystem-logo.png" alt="Meridian Logo" class="eco-node-logo">
+                </div>
+            </button>
+
+            <button class="eco-node eco-node-right" data-target="right" aria-label="Meridian Edumart">
+                <div class="eco-node-content">
+                    MERIDIAN<br>EDUMART
+                </div>
+            </button>
+
+            <!-- Dynamic Information Card -->
+            <div class="eco-info-card" id="eco-info-card">
+                <div class="eco-info-title" id="eco-info-title"></div>
+                <div class="eco-info-desc" id="eco-info-desc"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- NEW: Impact Section -->
+    <section class="impact-section" id="impact">
+        <div class="impact-eyebrow gsap-fade-up-scroll">
+            <span class="dot"></span> 05 &mdash; IMPACT
+        </div>
+        <h2 class="impact-heading gsap-fade-up-scroll">Impact, measured.</h2>
+
+        <div class="impact-stats-row gsap-fade-up-scroll">
+            <div class="impact-stat">
+                <span class="impact-stat-number" data-target="150" data-suffix="+">00+</span>
+                <span class="impact-stat-label">COMMUNITIES REACHED</span>
+            </div>
+            <div class="impact-stat">
+                <span class="impact-stat-number" data-target="12000" data-suffix="+">00+</span>
+                <span class="impact-stat-label">STUDENTS SUPPORTED</span>
+            </div>
+            <div class="impact-stat">
+                <span class="impact-stat-number" data-target="50000" data-suffix="+">00+</span>
+                <span class="impact-stat-label">PEOPLE IMPACTED</span>
+            </div>
+            <div class="impact-stat">
+                <span class="impact-stat-number" data-target="45" data-suffix="+">00+</span>
+                <span class="impact-stat-label">PROGRAMS</span>
+            </div>
+            <div class="impact-stat">
+                <span class="impact-stat-number" data-target="100" data-prefix="₹" data-suffix=" Cr+">₹00 Cr+</span>
+                <span class="impact-stat-label">VALUE CREATED</span>
+            </div>
+        </div>
+
+        <div class="impact-disclaimer gsap-fade-up-scroll">
+            VERIFIED IMPACT DATA WILL BE PUBLISHED AS PROGRAMME RESULTS ARE CONFIRMED.
+        </div>
+    </section>
+
+    <!-- NEW: Dark Impact Stories Section -->
+    <section class="dark-stories-section">
+        <div class="dark-stories-header gsap-fade-up-scroll">
+            <h2 class="dark-stories-title">IMPACT STORIES</h2>
+            <div class="dark-stories-eyebrow">EVERY NUMBER HAS A HUMAN STORY.</div>
+        </div>
+        <div class="dark-stories-grid gsap-fade-up-scroll">
+            <div class="dark-card">
+                <div class="dark-card-img">
+                    <img src="indian_children_education_1790095446949.jpg" alt="Education Story">
+                </div>
+                <div class="dark-card-cat">EDUCATION</div>
+                <h3 class="dark-card-title">A classroom that opened a new future</h3>
+                <div class="dark-card-desc">A learner gained confidence and renewed focus through consistent support,
+                    local mentorship, and a more welcoming learning environment.</div>
+            </div>
+            <div class="dark-card">
+                <div class="dark-card-img">
+                    <img src="indian_youth_skills_1790095480885.jpg" alt="Skills Story">
+                </div>
+                <div class="dark-card-cat">SKILLS</div>
+                <h3 class="dark-card-title">From training room to first paycheck</h3>
+                <div class="dark-card-desc">Practical learning helped a young adult build vocational confidence and move
+                    toward stable employment and dignity.</div>
+            </div>
+            <div class="dark-card">
+                <div class="dark-card-img">
+                    <img src="indian_children_community_1790095516040.jpg" alt="Community Story">
+                </div>
+                <div class="dark-card-cat">COMMUNITY</div>
+                <h3 class="dark-card-title">A stronger community starts at home</h3>
+                <div class="dark-card-desc">Parents and local leaders came together to support youth learning,
+                    increasing trust, belonging, and long-term participation.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Real Stories Section -->
+    <section class="stories-section">
+        <div class="stories-eyebrow gsap-fade-up-scroll">
+            <span class="dot"></span> 06 &mdash; REAL STORIES
+        </div>
+        <h2 class="stories-heading gsap-fade-up-scroll">Impact has a human face.</h2>
+
+        <!-- Stories Grid -->
+        <div class="stories-grid">
+
+            <!-- Featured Story -->
+            <div class="featured-story-card gsap-fade-up-scroll">
+                <div class="story-video-container">
+                    <img src="m 1.jpeg" alt="Featured Story">
+                    <button class="story-play-btn" aria-label="Play video">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="story-content-wrap">
+                    <div class="story-meta-top">
+                        <span class="story-meta-label">FEATURED STORY</span>
+                    </div>
+                    <h3 class="story-title-large">Abinash Singh</h3>
+                    <div class="story-meta-details">BIHAR &bull; LEARNING ACCESS INITIATIVE</div>
+                    <blockquote class="story-quote">
+                        "For the first time, I could imagine myself staying in school and building a future beyond my
+                        village."
+                    </blockquote>
+                    <p class="story-desc">
+                        With structured support, regular mentoring, and a stronger local learning environment, Aditi
+                        found the confidence to continue her education and believe in her own long-term potential.
+                    </p>
+                    <a href="explore.html" class="initiative-link" style="font-size: 11px;">
+                        READ THE FULL STORY
+                        <div class="arrow-btn" style="width:32px;height:32px;margin-left:12px;display:inline-flex;">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Secondary Stories -->
+            <div class="secondary-stories-grid gsap-fade-up-scroll">
+                <div class="secondary-card">
+                    <div class="secondary-img">
+                        <img src="indian_children_education_1790095446949.jpg" alt="Learner journey">
+                    </div>
+                    <h4 class="secondary-title">A first-generation learner's journey</h4>
+                    <div class="secondary-meta">RITU &bull; LEARNING ACCESS &bull; BIHAR</div>
+                </div>
+
+                <div class="secondary-card">
+                    <div class="secondary-img">
+                        <img src="indian_youth_skills_1790095480885.jpg" alt="Training room">
+                    </div>
+                    <h4 class="secondary-title">From training room to first paycheck</h4>
+                    <div class="secondary-meta">SURAJ &bull; SKILLS PROGRAM &bull; UTTAR PRADESH</div>
+                </div>
+
+                <div class="secondary-card">
+                    <div class="secondary-img">
+                        <img src="indian_classroom_learning_1790095619380.jpg" alt="Classroom">
+                    </div>
+                    <h4 class="secondary-title">A classroom that changed a village</h4>
+                    <div class="secondary-meta">COMMUNITY GROUP &bull; LEARNING HUB &bull; MADHYA PRADESH</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NEW: Approach Section -->
+    <section class="approach-section">
+        <div class="approach-eyebrow gsap-fade-up-scroll">
+            <span class="dot"></span> 07 &mdash; OUR APPROACH
+        </div>
+        <h2 class="approach-heading gsap-fade-up-scroll">How we work.</h2>
+
+        <div class="approach-timeline gsap-fade-up-scroll">
+            <div class="timeline-line"></div>
+            <div class="timeline-steps">
+
+                <div class="timeline-step">
+                    <div class="timeline-dot-wrapper">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="step-num">01</div>
+                    <h4 class="step-title">LISTEN</h4>
+                    <p class="step-desc">Understand communities and their needs &mdash; directly, and on their terms.
+                    </p>
+                </div>
+
+                <div class="timeline-step">
+                    <div class="timeline-dot-wrapper">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="step-num">02</div>
+                    <h4 class="step-title">UNDERSTAND</h4>
+                    <p class="step-desc">Identify the opportunities that matter most and will last.</p>
+                </div>
+
+                <div class="timeline-step">
+                    <div class="timeline-dot-wrapper">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="step-num">03</div>
+                    <h4 class="step-title">COLLABORATE</h4>
+                    <p class="step-desc">Work alongside communities and partners, not around them.</p>
+                </div>
+
+                <div class="timeline-step">
+                    <div class="timeline-dot-wrapper">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="step-num">04</div>
+                    <h4 class="step-title">IMPLEMENT</h4>
+                    <p class="step-desc">Turn shared ideas into practical, well-run action.</p>
+                </div>
+
+                <div class="timeline-step">
+                    <div class="timeline-dot-wrapper">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="step-num">05</div>
+                    <h4 class="step-title">MEASURE</h4>
+                    <p class="step-desc">Track outcomes honestly, learn, and improve every cycle.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: People Behind the Impact Section -->
+    <section class="people-impact-section">
+        <div class="people-grid">
+            <div class="people-text-col gsap-fade-up-scroll">
+                <h2 class="people-title">THE PEOPLE BEHIND<br>THE IMPACT</h2>
+                <p class="people-desc">Beneficiaries, teachers, trainers and community members. Real stories from our
+                    programmes will appear here.</p>
+            </div>
+            <div class="people-cards-col gsap-fade-up-scroll">
+                <div class="people-card">
+                    <div class="people-image">
+                        <img src="m 1.jpeg" alt="Learner">
+                    </div>
+                    <div class="people-cat">LEARNER</div>
+                    <div class="people-subtext">A young learner with a renewed sense of possibility and a stronger
+                        connection to education.</div>
+                </div>
+                <div class="people-card">
+                    <div class="people-image">
+                        <img src="indian_youth_skills_1790095480885.jpg" alt="Trainer">
+                    </div>
+                    <div class="people-cat">TRAINER</div>
+                    <div class="people-subtext">A mentor guiding practical skills, confidence, and pathways into work
+                        and livelihood.</div>
+                </div>
+                <div class="people-card">
+                    <div class="people-image">
+                        <img src="indian_children_community_1790095516040.jpg" alt="Community member">
+                    </div>
+                    <div class="people-cat">COMMUNITY MEMBER</div>
+                    <div class="people-subtext">Local leaders and families supporting young people to learn, grow, and
+                        lead together.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Donate Section -->
+    <section class="donate-section" id="donate">
+        <div class="donate-grid">
+
+            <div class="donate-text-col gsap-fade-up-scroll">
+                <div class="donate-eyebrow">
+                    <span class="dot"></span> 09 &mdash; DONATE
+                </div>
+                <h2 class="donate-heading">
+                    Your support can become someone's <span class="yellow">opportunity.</span>
+                </h2>
+                <p class="donate-desc">
+                    Every contribution is directed toward programs that widen access to education, skills and community
+                    opportunity.
+                </p>
+
+                <div class="donate-features">
+                    <div class="donate-feature">
+                        <div class="donate-feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <div class="donate-feature-text">Registration & compliance details &mdash; to be published</div>
+                    </div>
+                    <div class="donate-feature">
+                        <div class="donate-feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                                <polyline points="10 9 9 9 8 9" />
+                            </svg>
+                        </div>
+                        <div class="donate-feature-text">Utilisation and impact reports &mdash; to be published</div>
+                    </div>
+                    <div class="donate-feature">
+                        <div class="donate-feature-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </div>
+                        <div class="donate-feature-text">Secure online payments &mdash; gateway launching soon</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="donate-widget gsap-fade-up-scroll">
+                <div class="donate-toggle">
+                    <div class="toggle-btn active" style="pointer-events: none;">ONE TIME</div>
+                </div>
+                <div class="donate-amounts">
+                    <button type="button" class="amount-btn preset-btn" data-amount="500">₹500</button>
+                    <button type="button" class="amount-btn preset-btn" data-amount="1000">₹1,000</button>
+                    <button type="button" class="amount-btn preset-btn" data-amount="2500">₹2,500</button>
+                    <button type="button" class="amount-btn preset-btn" data-amount="5000">₹5,000</button>
+                    <div class="custom-amount-wrap active" id="customAmountWrap" aria-label="Custom amount">
+                        <span class="currency-prefix">₹</span>
+                        <input type="text" class="custom-amount" id="customAmount" inputmode="numeric" pattern="[0-9]*"
+                            placeholder="Custom" aria-label="Custom donation amount">
+                    </div>
+                </div>
+                <button class="donate-submit" id="rzp-button">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                    DONATE NOW
+                </button>
+                <div class="donate-disclaimer">
+                    PREVIEW &mdash; NO PAYMENT IS PROCESSED YET. ONLINE GIVING LAUNCHES SOON.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- NEW: Be A Part Section -->
+    <section class="be-a-part-section">
+        <div class="part-eyebrow gsap-fade-up-scroll">
+            <span class="dot"></span> 10 &mdash; BE A PART
+        </div>
+        <h2 class="part-heading gsap-fade-up-scroll">
+            There are many ways to<br>create change.
+        </h2>
+
+        <div class="part-list">
+            <div class="part-item gsap-fade-up-scroll">
+                <span class="part-num">01</span>
+                <span class="part-title">DONATE</span>
+                <span class="part-arrow"><svg viewBox="0 0 24 24">
+                        <path d="M5 19L19 5M19 5H10M19 5V14" />
+                    </svg></span>
+            </div>
+            <div class="part-item gsap-fade-up-scroll">
+                <span class="part-num">02</span>
+                <span class="part-title">VOLUNTEER</span>
+                <span class="part-arrow"><svg viewBox="0 0 24 24">
+                        <path d="M5 19L19 5M19 5H10M19 5V14" />
+                    </svg></span>
+            </div>
+            <div class="part-item gsap-fade-up-scroll">
+                <span class="part-num">03</span>
+                <span class="part-title">PARTNER</span>
+                <span class="part-arrow"><svg viewBox="0 0 24 24">
+                        <path d="M5 19L19 5M19 5H10M19 5V14" />
+                    </svg></span>
+            </div>
+            <div class="part-item gsap-fade-up-scroll">
+                <span class="part-num">04</span>
+                <span class="part-title">SCHOOL / INSTITUTION</span>
+                <span class="part-arrow"><svg viewBox="0 0 24 24">
+                        <path d="M5 19L19 5M19 5H10M19 5V14" />
+                    </svg></span>
+            </div>
+            <div class="part-item gsap-fade-up-scroll">
+                <span class="part-num">05</span>
+                <span class="part-title">COMMUNITY</span>
+                <span class="part-arrow"><svg viewBox="0 0 24 24">
+                        <path d="M5 19L19 5M19 5H10M19 5V14" />
+                    </svg></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Accountability Section -->
+    <section class="accountability-section">
+        <div class="acc-eyebrow gsap-fade-up-scroll">
+            <span class="dot"></span> 11 &mdash; ACCOUNTABILITY
+        </div>
+        <h2 class="acc-heading gsap-fade-up-scroll">
+            Built on trust. <span class="grey">Accountable by design.</span>
+        </h2>
+        <p class="acc-desc gsap-fade-up-scroll">
+            Official documents will be published here as they are finalized. Nothing is listed until it is verified and
+            current.
+        </p>
+
+        <div class="acc-list-container gsap-fade-up-scroll">
+            <!-- 1 -->
+            <div class="acc-item">
+                <div class="acc-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-title">Legal & Registration</div>
+                    <div class="acc-subtext">YEAR &mdash; TO BE PUBLISHED</div>
+                </div>
+                <a href="#" class="acc-download">DOWNLOAD &rarr;</a>
+            </div>
+            <!-- 2 -->
+            <div class="acc-item">
+                <div class="acc-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-title">Governance</div>
+                    <div class="acc-subtext">YEAR &mdash; TO BE PUBLISHED</div>
+                </div>
+                <a href="#" class="acc-download">DOWNLOAD &rarr;</a>
+            </div>
+            <!-- 3 -->
+            <div class="acc-item">
+                <div class="acc-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-title">Financial Information</div>
+                    <div class="acc-subtext">YEAR &mdash; TO BE PUBLISHED</div>
+                </div>
+                <a href="#" class="acc-download">DOWNLOAD &rarr;</a>
+            </div>
+            <!-- 4 -->
+            <div class="acc-item">
+                <div class="acc-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-title">Annual Reports</div>
+                    <div class="acc-subtext">YEAR &mdash; TO BE PUBLISHED</div>
+                </div>
+                <a href="#" class="acc-download">DOWNLOAD &rarr;</a>
+            </div>
+            <!-- 5 -->
+            <div class="acc-item">
+                <div class="acc-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-title">Impact Reports</div>
+                    <div class="acc-subtext">YEAR &mdash; TO BE PUBLISHED</div>
+                </div>
+                <a href="#" class="acc-download">DOWNLOAD &rarr;</a>
+            </div>
+            <!-- 6 -->
+            <div class="acc-item">
+                <div class="acc-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-title">Policies</div>
+                    <div class="acc-subtext">YEAR &mdash; TO BE PUBLISHED</div>
+                </div>
+                <a href="#" class="acc-download">DOWNLOAD &rarr;</a>
+            </div>
+            <!-- 7 -->
+            <div class="acc-item">
+                <div class="acc-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-title">Safeguarding</div>
+                    <div class="acc-subtext">YEAR &mdash; TO BE PUBLISHED</div>
+                </div>
+                <a href="#" class="acc-download">DOWNLOAD &rarr;</a>
+            </div>
+            <!-- 8 -->
+            <div class="acc-item">
+                <div class="acc-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="acc-content">
+                    <div class="acc-title">Feedback & Complaints</div>
+                    <div class="acc-subtext">YEAR &mdash; TO BE PUBLISHED</div>
+                </div>
+                <a href="#" class="acc-download">DOWNLOAD &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Final CTA Section -->
+    <section class="final-cta-section">
+        <h2 class="final-cta-heading">
+            The future is <span class="yellow">built<br>together.</span>
+        </h2>
+        <p class="final-cta-desc">
+            Join Meridian Trust in creating meaningful opportunities and stronger communities.
+        </p>
+        <div class="final-cta-buttons">
+            <a href="#donate" class="final-cta-btn-primary">SUPPORT OUR WORK</a>
+            <a href="#" class="final-cta-btn-secondary"
+                onclick="document.getElementById('joinModal').classList.add('active'); document.getElementById('modalTitle').innerHTML='Join as &mdash; Partner'; document.getElementById('modalDesc').innerHTML='Leave your details and the Meridian team will reach out about partnership opportunities.'; return false;">PARTNER
+                WITH US</a>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <span class="dot"></span> IMPACT
+        </div>
+        <div class="footer-grid">
+            <!-- Column 1 -->
+            <div class="footer-col-main">
+                <div class="footer-logo">
+                    <img src="svg.svg" alt="Meridian International Education and Skills Trust"
+                        style="height: 56px; width: auto;" />
+                </div>
+                <div class="footer-trust-type">GENERAL CHARITABLE TRUST</div>
+                <div class="footer-tagline">
+                    EDUCATION FOR ALL &middot; SKILLS FOR THE<br>FUTURE &middot; SERVICE TO SOCIETY
+                </div>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="footer-col-nav">
+                <h4>EXPLORE</h4>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#impact">Our Impact</a></li>
+                    <li><a href="#">Impact Journey</a></li>
+                    <li><a href="#">Stories</a></li>
+                    <li><a href="#donate">Get Involved</a></li>
+                    <li><a href="#donate">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="footer-col-nav">
+                <h4>LEGAL</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4 -->
+            <div class="footer-col-nav">
+                <h4>SOCIAL</h4>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL -->
+    <div class="join-modal-overlay" id="joinModal">
+        <div class="join-modal">
+            <button class="modal-close" id="closeModal">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <h3 class="modal-title" id="modalTitle">Join as &mdash; Volunteer</h3>
+            <p class="modal-desc" id="modalDesc">Leave your details and the Meridian team will reach out about volunteer
+                opportunities.</p>
+            <form class="modal-form" onsubmit="event.preventDefault();">
+                <input type="text" class="modal-input" placeholder="Your name" required>
+                <input type="email" class="modal-input" placeholder="Your email" required>
+                <button type="submit" class="modal-submit">EXPRESS INTEREST</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 1. Initialize Lenis (Buttery Smooth Momentum Scroll)
+        const lenis = new Lenis({
+            duration: 2.0, // Increased for more fluid/buttery momentum
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1.5, // Scroll further per wheel tick
+            smoothTouch: true, // Enable smooth scroll on touch devices
+        });
+
+        // Sync Lenis with GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
+
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0, 0);
+
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const navIndicator = document.querySelector('.nav-indicator');
+
+        function updateNavIndicator(activeLink) {
+            if (!activeLink || !navIndicator) return;
+
+            const navRect = activeLink.parentElement.getBoundingClientRect();
+            const linkRect = activeLink.getBoundingClientRect();
+            const left = linkRect.left - navRect.left + (linkRect.width / 2);
+            navIndicator.style.left = `${left}px`;
+            navIndicator.style.bottom = '-13px';
+            navIndicator.style.opacity = '1';
+        }
+
+        function setActiveNavLink(hash) {
+            const targetLink = document.querySelector(`.nav-links a[href="${hash}"]`);
+            navLinks.forEach(link => {
+                const isActive = link === targetLink;
+                link.classList.toggle('active', isActive);
+            });
+
+            if (targetLink) {
+                requestAnimationFrame(() => updateNavIndicator(targetLink));
+            }
+        }
+
+        // Smooth scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = this.getAttribute('href');
+                if (target !== '#') {
+                    e.preventDefault();
+                    setActiveNavLink(target);
+                    lenis.scrollTo(target);
+                }
+            });
+        });
+
+        function handleScrollNavState() {
+            const sections = [...document.querySelectorAll('section[id], header[id], footer[id]')].filter(el => ['home', 'about', 'our-work', 'impact'].includes(el.id));
+            const scrollPosition = window.scrollY + 180;
+            let current = 'home';
+
+            sections.forEach(section => {
+                if (scrollPosition >= section.offsetTop) {
+                    current = section.id;
+                }
+            });
+
+            setActiveNavLink(`#${current}`);
+        }
+
+        window.addEventListener('scroll', handleScrollNavState, { passive: true });
+        window.addEventListener('resize', () => {
+            const activeLink = document.querySelector('.nav-links a.active');
+            if (activeLink) updateNavIndicator(activeLink);
+        });
+        window.addEventListener('load', () => setActiveNavLink('#home'));
+        setActiveNavLink('#home');
+
+        // Donation amount selection logic
+        const presetBtns = document.querySelectorAll('.preset-btn');
+        const customAmountWrap = document.getElementById('customAmountWrap');
+        const customAmountInput = document.getElementById('customAmount');
+        let selectedAmount = 0;
+
+        function setSelectedAmount(value) {
+            const cleaned = Number(String(value).replace(/[^\d]/g, ''));
+            selectedAmount = Number.isFinite(cleaned) && cleaned > 0 ? cleaned : 0;
+        }
+
+        function activateCustomAmount() {
+            presetBtns.forEach(btn => btn.classList.remove('active'));
+            customAmountWrap.classList.add('active');
+            if (!customAmountInput.value.trim()) {
+                customAmountInput.placeholder = 'Custom';
+            }
+            customAmountInput.focus();
+        }
+
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                presetBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                customAmountWrap.classList.remove('active');
+                customAmountInput.value = '';
+                setSelectedAmount(this.getAttribute('data-amount'));
+            });
+        });
+
+        customAmountWrap.addEventListener('click', () => {
+            activateCustomAmount();
+        });
+
+        customAmountInput.addEventListener('focus', () => {
+            customAmountWrap.classList.add('active');
+            presetBtns.forEach(btn => btn.classList.remove('active'));
+        });
+
+        customAmountInput.addEventListener('input', function () {
+            const rawValue = this.value.trim();
+            this.value = rawValue.replace(/[^\d]/g, '');
+            customAmountWrap.classList.add('active');
+            setSelectedAmount(this.value);
+        });
+
+        customAmountInput.addEventListener('blur', function () {
+            if (!this.value.trim()) {
+                selectedAmount = 0;
+                customAmountWrap.classList.add('active');
+                this.placeholder = 'Custom';
+            }
+        });
+
+        customAmountWrap.classList.add('active');
+        customAmountInput.placeholder = 'Custom';
+        customAmountInput.value = '';
+        selectedAmount = 0;
+
+        // Razorpay integration via Backend
+        document.getElementById('rzp-button').addEventListener('click', async function (e) {
+            e.preventDefault();
+
+            if (!selectedAmount || selectedAmount <= 0) {
+                alert('Please select or enter a valid donation amount.');
+                return;
+            }
+
+            const submitBtn = this;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'PROCESSING...';
+            submitBtn.style.pointerEvents = 'none';
+
+            try {
+                // 1. Create order on backend
+                const response = await fetch('/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: selectedAmount })
+                });
+                const order = await response.json();
+
+                if (order.error) {
+                    alert('Error: ' + order.error);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.pointerEvents = 'auto';
+                    return;
+                }
+
+                // 2. Initialize Razorpay
+                var options = {
+                    "key": "rzp_test_Tf7LCAAG9DFUyW", // Your Razorpay Test Key ID
+                    "amount": order.amount,
+                    "currency": order.currency,
+                    "name": "Meridian Trust",
+                    "description": "Donation for Education and Skills",
+                    "image": "https://dummyimage.com/150x150/ffca05/000000&text=Logo",
+                    "order_id": order.id, // The Order ID from our backend
+                    "handler": async function (response) {
+                        // 3. Verify Payment on backend
+                        try {
+                            const verifyRes = await fetch('/verify-payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+
+                            const verifyData = await verifyRes.json();
+
+                            if (verifyData.success) {
+                                alert("Payment successful & verified!");
+                            } else {
+                                alert("Payment verification failed. Please contact support.");
+                            }
+                        } catch (err) {
+                            alert("Error verifying payment on server.");
+                        }
+                    },
+                    "prefill": {
+                        "name": "Generous Donor",
+                        "email": "donor@example.com",
+                        "contact": "9999999999"
+                    },
+                    "theme": {
+                        "color": "#ffca05"
+                    }
+                };
+                var rzp1 = new Razorpay(options);
+
+                rzp1.on('payment.failed', function (response) {
+                    alert("Payment Failed. Reason: " + response.error.description);
+                });
+
+                // Re-enable button after Razorpay closes/opens
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.pointerEvents = 'auto';
+
+                rzp1.open();
+            } catch (err) {
+                console.error(err);
+                alert('Unable to initialize payment.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.pointerEvents = 'auto';
+            }
+        });
+
+        // Stub buttons feedback logic (excluding donate-submit now)
+        document.querySelectorAll('.acc-download, .story-play-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                alert('This feature is currently in development and will be available soon.');
+            });
+        });
+
+        // 2. Sticky Navbar Logic
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // 3. GSAP Hero Load Animations (Plays immediately)
+        const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+        heroTl.fromTo(".gsap-title-line",
+            { y: 100, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, delay: 0.2 }
+        )
+            .fromTo(".gsap-fade-up",
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1, stagger: 0.15 },
+                "-=0.8" // Start slightly before the title finishes
+            );
+
+        // 4. GSAP Scroll Image Animations (The "Award Winning" Reveal & Parallax)
+        gsap.utils.toArray('.js-image-reveal').forEach((container) => {
+            const img = container.querySelector('img');
+
+            // Step A: The unmasking effect (clip-path opening upward)
+            gsap.to(container, {
+                clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+                ease: "power3.inOut",
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top 85%", // Starts when top of image hits 85% of screen
+                    end: "top 40%",
+                    scrub: 1.5, // The 1.5 adds a slight lag/smoothness to the tie-in
+                }
+            });
+
+            // Step B: The image scale-down & Parallax effect inside the mask
+            gsap.to(img, {
+                y: "15%", // Parallax shift
+                scale: 1, // Scales down to normal size from 1.3
+                ease: "none",
+                scrollTrigger: {
+                    trigger: container,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true, // Ties directly to scrollbar
+                }
+            });
+        });
+
+        // 5. GSAP Scroll Text Animations (Fade up on scroll)
+        gsap.utils.toArray('.gsap-text-reveal').forEach(text => {
+            gsap.fromTo(text,
+                { y: 60, opacity: 0 },
+                {
+                    y: 0, opacity: 1, duration: 1.2, ease: "power4.out",
+                    scrollTrigger: { trigger: text, start: "top 85%" }
+                }
+            );
+        });
+
+        gsap.utils.toArray('.gsap-fade-up-scroll').forEach(element => {
+            gsap.fromTo(element,
+                { y: 30, opacity: 0 },
+                {
+                    y: 0, opacity: 1, duration: 1, ease: "power3.out",
+                    scrollTrigger: { trigger: element, start: "top 85%" }
+                }
+            );
+        });
+
+        // 6. Ecosystem Interaction (Reference Animation Logic)
+        const ecoData = {
+            left: {
+                title: "AI-LED LEARNING",
+                description: "Meridian AI International Academy — select the node to learn more."
+            },
+            center: {
+                title: "THE PARENT FOUNDATION",
+                description: "Meridian Trust — select the node to learn more."
+            },
+            right: {
+                title: "EDUCATION ENABLEMENT",
+                description: "Meridian Edumart — select the node to learn more."
+            }
+        };
+
+        const ecoContainer = document.querySelector('.ecosystem-container');
+        const ecoNodes = document.querySelectorAll('.eco-node');
+        const ecoInfoCard = document.getElementById('eco-info-card');
+        const ecoInfoTitle = document.getElementById('eco-info-title');
+        const ecoInfoDesc = document.getElementById('eco-info-desc');
+
+        let activeTimeout;
+
+        ecoNodes.forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                clearTimeout(activeTimeout);
+                const target = node.dataset.target;
+
+                // Clear active from all nodes
+                ecoNodes.forEach(n => n.classList.remove('active'));
+                node.classList.add('active');
+
+                // Update container for SVG path styling
+                ecoContainer.setAttribute('data-active', target);
+
+                // Update Information Card
+                ecoInfoTitle.textContent = ecoData[target].title;
+                ecoInfoDesc.textContent = ecoData[target].description;
+                ecoInfoCard.classList.add('visible');
+            });
+
+            node.addEventListener('mouseleave', () => {
+                // Short delay to clear state, preventing flicker between nodes
+                activeTimeout = setTimeout(() => {
+                    node.classList.remove('active');
+                    ecoContainer.removeAttribute('data-active');
+                    ecoInfoCard.classList.remove('visible');
+                }, 250);
+            });
+
+            // For touch devices
+            node.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Toggle logic could apply here if needed
+            });
+        });
+
+        // 7. Counter Animation for Impact Stats
+        gsap.utils.toArray('.impact-stat-number').forEach(stat => {
+            const target = parseFloat(stat.getAttribute('data-target'));
+            const prefix = stat.getAttribute('data-prefix') || '';
+            const suffix = stat.getAttribute('data-suffix') || '';
+
+            gsap.fromTo(stat,
+                { innerHTML: 0 },
+                {
+                    innerHTML: target,
+                    duration: 2.5,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: stat,
+                        start: "top 85%", // Triggers precisely when the specific number scrolls into view
+                    },
+                    snap: { innerHTML: 1 },
+                    onUpdate: function () {
+                        let val = Math.round(this.targets()[0].innerHTML);
+                        let formattedVal = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        this.targets()[0].innerHTML = prefix + formattedVal + suffix;
+                    }
+                }
+            );
+        });
+
+        // 8. Join Modal Logic
+        const joinModal = document.getElementById('joinModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+
+        const partItems = document.querySelectorAll('.part-item');
+
+        partItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                const titleText = item.querySelector('.part-title').innerText;
+
+                if (titleText === 'DONATE') {
+                    lenis.scrollTo('.donate-section');
+                    return;
+                }
+
+                let formattedTitle = titleText.charAt(0) + titleText.slice(1).toLowerCase();
+                if (titleText === 'SCHOOL / INSTITUTION') formattedTitle = 'School / Institution';
+
+                modalTitle.innerHTML = `Join as &mdash; ${formattedTitle}`;
+                modalDesc.innerHTML = `Leave your details and the Meridian team will reach out about ${formattedTitle.toLowerCase()} opportunities.`;
+
+                joinModal.classList.add('active');
+            });
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            joinModal.classList.remove('active');
+        });
+
+        joinModal.addEventListener('click', (e) => {
+            if (e.target === joinModal) {
+                joinModal.classList.remove('active');
+            }
+        });
+
+    </script>
+<script>
+// Hamburger Toggle
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            
+            // Hamburger animation
+            const spans = hamburger.querySelectorAll('span');
+            if (navLinks.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+        
+        // Close menu on link click
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                const spans = hamburger.querySelectorAll('span');
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            });
+        });
+    }
+});
+</script>
+</body>
+
+</html> // Adding a subtle scale and fade animation while pinned
+// to remove the "hard stop" feeling and make it fluid
+ecoPinTl.fromTo(".ecosystem-container",
+{ scale: 1 },
+{ scale: 1.05, ease: "none" }
+);
+
+</script>
+</body>
+
+</html>
