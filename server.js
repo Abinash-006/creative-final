@@ -127,7 +127,7 @@ const razorpay = new Razorpay({
 // Create Order API
 app.post('/create-order', async (req, res) => {
     try {
-        const { amount } = req.body;
+        const { amount, name, email, phone } = req.body;
         if (!amount || amount <= 0) {
             return res.status(400).json({ error: 'Invalid amount' });
         }
@@ -142,6 +142,9 @@ app.post('/create-order', async (req, res) => {
 
         // Save pending donation to DB
         const newDonation = new Donation({
+            donorName: name || 'Generous Donor',
+            email: email || 'donor@example.com',
+            phone: phone || 'Not provided',
             amount: amount,
             razorpayOrderId: order.id,
             status: 'Pending'
@@ -152,6 +155,23 @@ app.post('/create-order', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error creating order' });
+    }
+});
+
+// Cancel Payment API
+app.post('/cancel-payment', async (req, res) => {
+    try {
+        const { razorpay_order_id } = req.body;
+        if (razorpay_order_id) {
+            await Donation.findOneAndUpdate(
+                { razorpayOrderId: razorpay_order_id },
+                { status: 'Failed' }
+            );
+        }
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error cancelling payment' });
     }
 });
 

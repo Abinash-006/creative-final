@@ -4157,6 +4157,12 @@
                             placeholder="Custom" aria-label="Custom donation amount">
                     </div>
                 </div>
+                
+                <div class="donor-details" style="margin-bottom: 20px;">
+                    <input type="text" id="donorName" placeholder="Your Name" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px;">
+                    <input type="email" id="donorEmail" placeholder="Email Address" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px;">
+                    <input type="text" id="donorPhone" placeholder="Phone Number" style="width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px;">
+                </div>
                 <button class="donate-submit" id="rzp-button">
                     <svg viewBox="0 0 24 24">
                         <path
@@ -4621,11 +4627,15 @@
 
             try {
                 // 1. Create order on backend
-                const response = await fetch('/create-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ amount: selectedAmount })
-                });
+                            const dName = document.getElementById('donorName') ? document.getElementById('donorName').value : '';
+            const dEmail = document.getElementById('donorEmail') ? document.getElementById('donorEmail').value : '';
+            const dPhone = document.getElementById('donorPhone') ? document.getElementById('donorPhone').value : '';
+
+            const response = await fetch('/create-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: selectedAmount, name: dName, email: dEmail, phone: dPhone })
+            });
                 const order = await response.json();
 
                 if (order.error) {

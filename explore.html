@@ -785,7 +785,7 @@
         
         async function loadExplorePosters() {
             try {
-                const response = await fetch('http://localhost:3000/api/posters');
+                const response = await fetch('/api/posters');
                 if (response.ok) {
                     const posters = await response.json();
                     renderPosters(posters);
