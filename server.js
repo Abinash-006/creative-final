@@ -215,6 +215,18 @@ app.post('/verify-payment', async (req, res) => {
     }
 });
 
+// UX State: 404 Not Found Handler
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
+// UX State: 500 Internal Server Error Handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    // Fallback if 500.html doesn't exist yet, we just send a generic message
+    res.status(500).send('<h1>500 - Internal Server Error</h1><p>Something broke on our end. We are fixing it.</p>');
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
