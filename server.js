@@ -7,6 +7,7 @@ const cors = require('cors');
 const path = require('path');
 const Donation = require('./models/Donation');
 const Poster = require('./models/Poster');
+const OurWork = require('./models/OurWork');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Protect sensitive files from being served statically
 app.use((req, res, next) => {
+    if (req.path === '/work-loader.js') return next();
     if (req.path.includes('.env') || req.path.endsWith('.js') || req.path.endsWith('.json') || req.path.includes('models/')) {
         return res.status(403).send('Forbidden');
     }
@@ -75,6 +77,39 @@ app.delete('/api/posters/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Unable to delete poster' });
+    }
+});
+
+// Our Work APIs
+app.get('/api/work', async (req, res) => {
+    try {
+        if (mongoose.connection.readyState !== 1) return res.json([]);
+        const works = await OurWork.find().sort({ order: 1 });
+        res.json(works);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Unable to fetch our work' });
+    }
+});
+
+app.post('/api/work', async (req, res) => {
+    try {
+        const work = new OurWork(req.body);
+        await work.save();
+        res.json(work);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Unable to create work' });
+    }
+});
+
+app.delete('/api/work/:id', async (req, res) => {
+    try {
+        await OurWork.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Unable to delete work' });
     }
 });
 

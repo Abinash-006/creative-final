@@ -26,9 +26,11 @@
 
         body {
             background: #080808;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #050505 100%);
             color: #fff;
             font-family: Arial, Helvetica, sans-serif;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
         /* ===== NAVBAR ===== */
@@ -51,8 +53,14 @@
         .logo-placeholder {
             display: flex;
             align-items: center;
-            gap: 11px;
             flex-shrink: 0;
+        }
+
+        .logo-placeholder img {
+            display: block;
+            height: 72px;
+            width: auto;
+            max-width: 660px;
         }
 
         .nav-links {
@@ -98,6 +106,19 @@
         .page-hero {
             padding: 200px 10% 100px 10%;
             text-align: center;
+            position: relative;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(255,202,5,0.06) 0%, rgba(255,202,5,0) 70%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         .eyebrow {
@@ -148,19 +169,20 @@
         }
 
         .explore-card {
-            background: #111;
+            background: rgba(25, 25, 25, 0.4);
+            backdrop-filter: blur(20px);
             border-radius: 24px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            border: 1px solid rgba(255, 202, 5, 0.1);
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.5s ease, box-shadow 0.5s ease;
             display: flex;
             flex-direction: column;
         }
 
         .explore-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255, 202, 5, 0.4);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: translateY(-12px);
+            border-color: rgba(255, 202, 5, 0.5);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 20px rgba(255, 202, 5, 0.1);
         }
 
         /* MANUAL SLIDER CSS */
@@ -299,6 +321,21 @@
             color: #ffca05;
         }
 
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            transition: color 0.3s ease;
+        }
+        .back-btn:hover {
+            color: #ffca05;
+        }
+
         .arrow {
             width: 30px;
             height: 30px;
@@ -333,7 +370,344 @@
             .card-title { font-size: 24px; }
             .poster-details { grid-template-columns: 1fr; }
         }
-    </style>
+            /* ===== OUR WORK SECTION ===== */
+        .our-work-section {
+    background: transparent;
+    padding: 50px 10% 150px 10%;
+    color: #fff;
+}
+
+        .our-work-header {
+            margin-bottom: 60px;
+        }
+
+        .our-work-eyebrow {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #999;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .our-work-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .our-work-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .our-work-heading {
+    font-size: clamp(36px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+}
+
+        .our-work-sub {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #aaa;
+    max-width: 400px;
+    margin-bottom: 5px;
+}
+
+        /* Work Grid */
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 260px;
+            gap: 20px;
+        }
+
+        .work-card {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #111;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .work-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .card-wide {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+
+        .work-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: 2;
+        }
+
+        .card-number {
+            position: relative;
+            z-index: 3;
+            padding: 24px;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 2px;
+        }
+
+        .card-icon {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            z-index: 3;
+            width: 28px;
+            height: 28px;
+            background: #ffca05;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 3;
+            padding: 24px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 1024px) {
+            .work-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .card-large,
+            .card-wide {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-large,
+            .card-wide {
+                grid-column: span 1;
+            }
+
+            .our-work-title-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+        }
+        /* ===== FOOTER SECTION ===== */
+        .site-footer {
+            background: #111;
+            color: #fff;
+            padding: 80px 10% 40px 10%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-top {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #ffca05;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        .footer-top .dot {
+            width: 6px;
+            height: 6px;
+            background: #ffca05;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-col-main {
+            padding-right: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .footer-logo-mark {
+            width: 45px;
+            height: 45px;
+            border: 3px solid #ffca05;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .footer-logo-mark::before {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 22px;
+            background: #ffca05;
+            border-radius: 8px;
+            left: 16px;
+            top: 8px;
+            transform: rotate(28deg);
+        }
+
+        .footer-logo-mark::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffca05;
+            border-radius: 50%;
+            left: 28px;
+            top: 4px;
+        }
+
+        .footer-logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-logo-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .footer-logo-sub {
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ccc;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .footer-trust-type {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #777;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .footer-tagline {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffca05;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-col-nav h4 {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #ffca05;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .footer-col-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-col-nav ul li {
+            margin-bottom: 16px;
+        }
+
+        .footer-col-nav ul li a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col-nav ul li a:hover {
+            color: #ffca05;
+        }
+
+        @media (max-width: 900px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .footer-col-main {
+                padding-right: 0;
+            }
+        }
+</style>
 </head>
 
 <body>
@@ -341,7 +715,7 @@
     <header class="navbar">
         <div class="logo-placeholder">
             <a href="index.html">
-                <img src="svg.svg" alt="Meridian Foundation Trust" style="height: 48px; width: auto;" />
+                <img src="Gemini_Generated_Image_x19y7jx19y7jx19y-Photoroom.png" alt="Meridian Foundation Trust" style="height: 80px; width: auto;" />
             </a>
         </div>
         <nav class="nav-links">
@@ -354,13 +728,33 @@
     </header>
 
     <section class="page-hero">
+        <a href="javascript:history.back()" class="back-btn gsap-fade-up" style="display: block; margin-bottom: 30px; text-transform: uppercase;">&larr; BACK TO HOME</a>
         <div class="eyebrow gsap-fade-up">
             <span class="dot"></span> EXPLORE OUR WORK
         </div>
         <h1 class="gsap-text-reveal">Deepen your <span class="yellow">understanding</span><br>of our initiatives.</h1>
         <p class="hero-desc gsap-fade-up">
-            Discover the detailed breakdown of our programs, from education and skilling to community development.
+            An in-depth look at how our strategic programs turn ambitious vision into measurable, lasting impact across communities.
         </p>
+    </section>
+
+        <!-- NEW: Our Work Section -->
+    <section class="our-work-section" id="our-work">
+        <div class="our-work-header gsap-fade-up-scroll">
+            <div class="our-work-eyebrow">
+                <span class="dot"></span> <span style="color:#ffca05">02</span> &nbsp;&mdash;&nbsp; OUR WORK
+            </div>
+            <div class="our-work-title-row">
+                <h2 class="our-work-heading">Turning purpose into<br>meaningful action.</h2>
+                <p class="our-work-sub">Six connected areas of work &mdash; each one a pathway from<br>intention to
+                    measurable change.</p>
+            </div>
+        </div>
+
+        <div class="work-grid" id="dynamicWorkGrid">
+            <!-- Dynamic Work Cards will be injected here -->
+            <div style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">Loading Our Work...</div>
+        </div>
     </section>
 
     <section class="explore-grid">
@@ -368,11 +762,14 @@
     </section>
 
     <script>
-        // Smooth Scrolling (Lenis)
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+        // Smooth Scrolling (Lenis) - reduce the float on mobile only
         const lenis = new Lenis({
-            duration: 1.2,
+            duration: isMobile ? 0.8 : 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smoothWheel: true,
+            smoothWheel: !isMobile,
+            smoothTouch: !isMobile,
         });
         function raf(time) {
             lenis.raf(time);
@@ -388,7 +785,7 @@
         
         async function loadExplorePosters() {
             try {
-                const response = await fetch('/api/posters');
+                const response = await fetch('http://localhost:3000/api/posters');
                 if (response.ok) {
                     const posters = await response.json();
                     renderPosters(posters);
@@ -487,31 +884,96 @@
         });
 
         // Manual Slider Logic
-        document.querySelectorAll('.slider-container').forEach(container => {
-            const track = container.querySelector('.slider-images');
-            const images = track.querySelectorAll('img');
-            const prevBtn = container.querySelector('.prev-btn');
-            const nextBtn = container.querySelector('.next-btn');
-            
-            let currentIndex = 0;
-            const totalImages = images.length;
+        function initSliders() {
+            document.querySelectorAll('.slider-container').forEach(container => {
+                const track = container.querySelector('.slider-images');
+                if (!track) return;
+                const images = track.querySelectorAll('img');
+                const prevBtn = container.querySelector('.prev-btn');
+                const nextBtn = container.querySelector('.next-btn');
+                
+                let currentIndex = 0;
+                const totalImages = images.length;
 
-            function updateSlider() {
-                track.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }
+                function updateSlider() {
+                    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                }
 
-            nextBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                currentIndex = (currentIndex + 1) % totalImages;
-                updateSlider();
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentIndex = (currentIndex + 1) % totalImages;
+                        updateSlider();
+                    });
+                }
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+                        updateSlider();
+                    });
+                }
             });
-
-            prevBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-                updateSlider();
-            });
-        });
+        }
+        initSliders();
     </script>
+<script src="work-loader.js"></script>
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <span class="dot"></span> IMPACT
+        </div>
+        <div class="footer-grid">
+            <!-- Column 1 -->
+            <div class="footer-col-main">
+                <div class="footer-logo">
+                    <img src="logob.svg" alt="Meridian International Education and Skills Trust"
+                        style="height: 56px; width: auto;" />
+                </div>
+                <div class="footer-trust-type">GENERAL CHARITABLE TRUST</div>
+                <div class="footer-tagline">
+                    EDUCATION FOR ALL &middot; SKILLS FOR THE<br>FUTURE &middot; SERVICE TO SOCIETY
+                </div>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="footer-col-nav">
+                <h4>EXPLORE</h4>
+                <ul>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#impact">Our Impact</a></li>
+                    <li><a href="#">Impact Journey</a></li>
+                    <li><a href="#">Stories</a></li>
+                    <li><a href="index.html#donate">Get Involved</a></li>
+                    <li><a href="index.html#donate">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="footer-col-nav">
+                <h4>LEGAL</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4 -->
+            <div class="footer-col-nav">
+                <h4>SOCIAL</h4>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
+
+

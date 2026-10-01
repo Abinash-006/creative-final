@@ -521,6 +521,13 @@
     opacity: 1;
     transform: translateY(0);
   }
+  /* Logo Swapping Logic */
+  .navbar.scrolled .logo-transparent {
+    display: none !important;
+  }
+  .navbar.scrolled .logo-scrolled {
+    display: block !important;
+  }
 </style>
 </head>
 
@@ -533,11 +540,8 @@
 
     <!-- LOGO PLACEHOLDER: replace this block with your logo -->
     <div class="logo-placeholder">
-      <div class="logo-mark"></div>
-      <div class="logo-text">
-        <span class="logo-name">MERIDIAN</span>
-        <span class="logo-sub">FOUNDATION TRUST</span>
-      </div>
+      <img src="Gemini_Generated_Image_x19y7jx19y7jx19y-Photoroom.png" alt="Meridian Foundation Trust" class="logo-transparent" style="height: 80px; width: auto;" />
+      <img src="WhatsApp Image 2026-09-22 at 8.22.36 PM-Photoroom.png" alt="Meridian Foundation Trust" class="logo-scrolled" style="height: 80px; width: auto; display: none;" />
     </div>
 
     <nav class="nav-links">
