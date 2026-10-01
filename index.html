@@ -93,12 +93,18 @@
         }
 
         .logo-placeholder {
-            width: 185px;
-            height: 58px;
+            width: auto;
+            height: auto;
             display: flex;
             align-items: center;
-            gap: 11px;
             flex-shrink: 0;
+        }
+
+        .logo-placeholder img {
+            display: block;
+            height: 72px;
+            width: auto;
+            max-width: 660px;
         }
 
         .logo-mark {
@@ -995,7 +1001,7 @@
             background: #080808;
             color: #ffffff;
             position: relative;
-            padding: 80px 0 0 0;
+            padding: 80px 0 150px 0;
             min-height: 700px;
             overflow: hidden;
             font-family: inherit;
@@ -1321,7 +1327,7 @@
             position: sticky;
             top: 0;
             z-index: 1;
-            padding: 80px 0 0 0;
+            padding: 80px 0 150px 0;
             min-height: 700px;
             overflow: hidden;
             font-family: inherit;
@@ -1597,7 +1603,8 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 40px;
-                padding: 40px 0;
+                padding: 40px 0 100px 0;
+                /* Added bottom padding to ensure the 3rd node is visible */
             }
 
             .eco-svg-bg {
@@ -1606,14 +1613,14 @@
 
             .eco-node {
                 position: relative;
-                left: auto;
-                top: auto;
-                transform: none;
+                left: auto !important;
+                top: auto !important;
+                transform: none !important;
             }
 
             .eco-node.active,
             .eco-node:hover {
-                transform: scale(1.05);
+                transform: scale(1.05) !important;
             }
 
             .eco-info-card {
@@ -1647,7 +1654,7 @@
             padding: 100px 10% 160px 10%;
             border-radius: 60px 60px 0 0;
             position: relative;
-            z-index: 2;
+            z-index: 20;
             margin-top: -60px;
             box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.04);
         }
@@ -3195,152 +3202,312 @@
                 padding-right: 0;
             }
         }
-    
-
-.eco-node-logo-wrapper {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #080808;
-}
-.eco-node-logo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scale(1.8);
-}
 
 
-.eco-info-card {
-    display: none !important;
-}
+        .eco-node-logo-wrapper {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #080808;
+        }
 
-/* ===== GLOBAL RESPONSIVE OPTIMIZATIONS ===== */
-@media (max-width: 900px) {
-    .hero {
-        height: auto;
-        min-height: 100vh;
-        overflow: visible;
-        padding-bottom: 60px;
-    }
-    .hero-content {
-        padding-top: 150px;
-    }
-}
-@media (max-width: 480px) {
-    .hero {
-        height: auto;
-        min-height: 100vh;
-        overflow: visible;
-        padding-bottom: 50px;
-    }
-    .hero-content {
-        padding-top: 120px;
-    }
-}
+        .eco-node-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.8);
+        }
 
-.hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    margin-left: 20px;
-    z-index: 100;
-}
-.hamburger span {
-    width: 25px;
-    height: 3px;
-    background: #ffca05;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-}
 
-@media (max-width: 1200px) {
-    .content-section, .founder-section, .our-work-section, .initiatives-section { padding-left: 5%; padding-right: 5%; }
-    .hero-content { margin-left: 5%; width: 55vw; }
-}
+        .eco-info-card {
+            display: none !important;
+        }
 
-@media (max-width: 900px) {
-    /* Navbar */
-    .navbar { padding: 0 5%; }
-    .hamburger { display: flex; }
-    .nav-links {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100vh;
-        background: #080808;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 30px;
-        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 40;
-    }
-    .nav-links.active { left: 0; }
-    .navbar.scrolled .nav-links { background: #ffffff; }
-    .navbar.scrolled .nav-links a { color: #000; font-size: 16px; }
-    .nav-links a { font-size: 16px; }
-    .nav-indicator { display: none; }
-    
-    /* Layouts */
-    .layout-grid, .founder-grid { grid-template-columns: 1fr; gap: 50px; }
-    .hero-content { width: 90%; padding-top: 20vh; }
-    h1 { font-size: clamp(40px, 8vw, 60px); }
-    .image-reveal-container { height: 50vh; }
-    .full-width-image { height: 50vh; margin-top: 50px; }
-    
-    .initiatives-grid { grid-template-columns: 1fr; }
-    
-    /* Founder Image Fixes */
-    .founder-image-col { max-width: 400px; }
-}
+        /* ===== GLOBAL RESPONSIVE OPTIMIZATIONS ===== */
+        @media (max-width: 900px) {
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                overflow: visible;
+                padding-bottom: 60px;
+            }
 
-@media (max-width: 768px) {
-    /* Actions */
-    .actions { flex-direction: column; align-items: flex-start; width: 100%; }
-    .actions .btn { width: 100%; max-width: 350px; }
-    
-    /* Typography */
-    .marquee-content { font-size: 20px; }
-    .marquee-content span.yellow-plus { margin: 0 20px; }
-    .founder-heading, .our-work-heading { font-size: clamp(32px, 6vw, 40px); }
-    
-    /* Sections */
-    .content-section { padding-top: 80px; padding-bottom: 80px; }
-    .founder-section, .our-work-section, .initiatives-section { padding-top: 80px; padding-bottom: 80px; }
-    
-    .our-work-title-row { flex-direction: column; align-items: flex-start; gap: 15px; }
-}
+            .hero-content {
+                padding-top: 150px;
+            }
+        }
 
-@media (max-width: 480px) {
-    .navbar { padding: 0 15px; height: 70px; }
-    .logo-placeholder img { height: 35px !important; }
-    .donate { width: 85px; height: 32px; font-size: 8px; }
-    
-    .hero-content { padding-top: 15vh; }
-    h1 { font-size: 36px; letter-spacing: -1px; margin-bottom: 20px; }
-    .description { font-size: 15px; margin-bottom: 25px; }
-    
-    .founder-heading, .our-work-heading { font-size: 28px; }
-    .quote-text { font-size: 16px; }
-    .founder-image-col { max-width: 100%; }
-    .yellow-circle { width: 150px; height: 150px; top: -20px; left: -20px; }
-    .black-circle { width: 80px; height: 80px; bottom: -20px; right: -20px; }
-    
-    .image-reveal-container { height: 40vh; }
-    .full-width-image { height: 40vh; margin-top: 30px; }
-    
-    .work-grid { grid-template-columns: 1fr; }
-    .card-large, .card-wide { grid-column: span 1; grid-row: span 1; }
-}
+        @media (max-width: 480px) {
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                overflow: visible;
+                padding-bottom: 50px;
+            }
 
-</style>
+            .hero-content {
+                padding-top: 120px;
+            }
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            margin-left: 20px;
+            z-index: 100;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #ffca05;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 1200px) {
+
+            .content-section,
+            .founder-section,
+            .our-work-section,
+            .initiatives-section {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .hero-content {
+                margin-left: 5%;
+                width: 55vw;
+            }
+        }
+
+        @media (max-width: 900px) {
+
+            /* Navbar */
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .donate {
+                margin-left: auto;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100vh;
+                background: #080808;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 30px;
+                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 40;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .navbar.scrolled .nav-links {
+                background: #ffffff;
+            }
+
+            .navbar.scrolled .nav-links a {
+                color: #000;
+                font-size: 16px;
+            }
+
+            .nav-links a {
+                font-size: 16px;
+            }
+
+            .nav-indicator {
+                display: none;
+            }
+
+            /* Layouts */
+            .layout-grid,
+            .founder-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .hero-content {
+                width: 90%;
+                padding-top: 20vh;
+            }
+
+            h1 {
+                font-size: clamp(40px, 8vw, 60px);
+            }
+
+            .image-reveal-container {
+                height: 50vh;
+            }
+
+            .full-width-image {
+                height: 50vh;
+                margin-top: 50px;
+            }
+
+            .initiatives-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Founder Image Fixes */
+            .founder-image-col {
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /* Actions */
+            .actions {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .actions .btn {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            /* Typography */
+            .marquee-content {
+                font-size: 20px;
+            }
+
+            .marquee-content span.yellow-plus {
+                margin: 0 20px;
+            }
+
+            .founder-heading,
+            .our-work-heading {
+                font-size: clamp(32px, 6vw, 40px);
+            }
+
+            /* Sections */
+            .content-section {
+                padding-top: 80px;
+                padding-bottom: 80px;
+            }
+
+            .founder-section,
+            .our-work-section,
+            .initiatives-section {
+                padding-top: 80px;
+                padding-bottom: 80px;
+            }
+
+            .our-work-title-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0 15px;
+                height: 70px;
+            }
+
+            .logo-placeholder img {
+                height: 60px !important;
+            }
+
+            .donate {
+                width: 85px;
+                height: 32px;
+                font-size: 8px;
+            }
+
+            .hero-content {
+                padding-top: 15vh;
+            }
+
+            h1 {
+                font-size: 36px;
+                letter-spacing: -1px;
+                margin-bottom: 20px;
+            }
+
+            .description {
+                font-size: 15px;
+                margin-bottom: 25px;
+            }
+
+            .founder-heading,
+            .our-work-heading {
+                font-size: 28px;
+            }
+
+            .quote-text {
+                font-size: 16px;
+            }
+
+            .founder-image-col {
+                max-width: 100%;
+            }
+
+            .yellow-circle {
+                width: 150px;
+                height: 150px;
+                top: -20px;
+                left: -20px;
+            }
+
+            .black-circle {
+                width: 80px;
+                height: 80px;
+                bottom: -20px;
+                right: -20px;
+            }
+
+            .image-reveal-container {
+                height: 40vh;
+            }
+
+            .full-width-image {
+                height: 40vh;
+                margin-top: 30px;
+            }
+
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-large,
+            .card-wide {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+        }
+    </style>
+    <style>
+        .navbar.scrolled .logo-transparent {
+            display: none !important;
+        }
+
+        .navbar.scrolled .logo-scrolled {
+            display: block !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -3348,7 +3515,10 @@
     <section class="hero" id="home">
         <header class="navbar">
             <div class="logo-placeholder">
-                <img src="svg.svg" alt="Meridian Foundation Trust" style="height: 48px; width: auto;" />
+                <img src="Gemini_Generated_Image_x19y7jx19y7jx19y-Photoroom.png" alt="Meridian Foundation Trust"
+                    class="logo-transparent" style="height: 80px; width: auto;" />
+                <img src="WhatsApp Image 2026-09-22 at 8.22.36 PM-Photoroom.png" alt="Meridian Foundation Trust"
+                    class="logo-scrolled" style="height: 80px; width: auto; display: none;" />
             </div>
             <nav class="nav-links">
                 <span class="nav-indicator" aria-hidden="true"></span>
@@ -3480,73 +3650,9 @@
             </div>
         </div>
 
-        <div class="work-grid">
-            <!-- Card 1 -->
-            <div class="work-card card-large gsap-fade-up-scroll">
-                <img src="indian_children_education_1790095446949.jpg" alt="Education">
-                <div class="card-overlay"></div>
-                <div class="card-number">01</div>
-                <div class="card-content">
-                    <h3 class="card-title">Education</h3>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="work-card gsap-fade-up-scroll">
-                <img src="indian_youth_skills_1790095480885.jpg" alt="Skills & Employability">
-                <div class="card-overlay"></div>
-                <div class="card-number">02</div>
-                <div class="card-content">
-                    <h3 class="card-title">Skills &<br>Employability</h3>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="work-card gsap-fade-up-scroll">
-                <img src="indian_children_community_1790095516040.jpg" alt="Community Development">
-                <div class="card-overlay"></div>
-                <div class="card-number">03</div>
-                <div class="card-content">
-                    <h3 class="card-title">Community<br>Development</h3>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="work-card gsap-fade-up-scroll">
-                <img src="indian_children_outdoor_1790095586676.jpg" alt="Youth Development">
-                <div class="card-overlay"></div>
-                <div class="card-number">04</div>
-                <div class="card-icon">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">Youth Development</h3>
-                    <p class="card-desc">Confidence, exposure and<br>leadership for young people.</p>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="work-card gsap-fade-up-scroll">
-                <img src="indian_child_tech_1790095546513.jpg" alt="Social Impact">
-                <div class="card-overlay"></div>
-                <div class="card-number">05</div>
-                <div class="card-content">
-                    <h3 class="card-title">Social Impact</h3>
-                </div>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="work-card card-wide gsap-fade-up-scroll">
-                <img src="indian_classroom_learning_1790095619380.jpg" alt="Innovation">
-                <div class="card-overlay"></div>
-                <div class="card-number">06</div>
-                <div class="card-content">
-                    <h3 class="card-title">Innovation</h3>
-                </div>
-            </div>
+        <div class="work-grid" id="dynamicWorkGrid">
+            <!-- Dynamic Work Cards will be injected here -->
+            <div style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">Loading Our Work...</div>
         </div>
     </section>
 
@@ -3579,7 +3685,7 @@
                 <div class="featured-impact">
                     IMPACT &mdash; ACCESS TO QUALITY LEARNING
                 </div>
-                <a href="#" class="founder-link">
+                <a href="explore.html" class="founder-link">
                     EXPLORE
                     <span class="arrow-btn">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -4292,7 +4398,7 @@
             <!-- Column 1 -->
             <div class="footer-col-main">
                 <div class="footer-logo">
-                    <img src="svg.svg" alt="Meridian International Education and Skills Trust"
+                    <img src="logob.svg" alt="Meridian International Education and Skills Trust"
                         style="height: 56px; width: auto;" />
                 </div>
                 <div class="footer-trust-type">GENERAL CHARITABLE TRUST</div>
@@ -4358,15 +4464,17 @@
     </div>
 
     <script>
-        // 1. Initialize Lenis (Buttery Smooth Momentum Scroll)
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+        // 1. Initialize Lenis (so mobile feels less floaty while desktop stays buttery smooth)
         const lenis = new Lenis({
-            duration: 2.0, // Increased for more fluid/buttery momentum
+            duration: isMobile ? 1.0 : 2.0,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             direction: 'vertical',
             gestureDirection: 'vertical',
             smooth: true,
-            mouseMultiplier: 1.5, // Scroll further per wheel tick
-            smoothTouch: true, // Enable smooth scroll on touch devices
+            mouseMultiplier: isMobile ? 0.9 : 1.5,
+            smoothTouch: !isMobile,
         });
 
         // Sync Lenis with GSAP ScrollTrigger
@@ -4596,11 +4704,34 @@
             });
         });
 
-        // 2. Sticky Navbar Logic
+        // 2. Sticky Navbar Logic (Hide on scroll down ONLY in Ecosystem section)
         const navbar = document.querySelector('.navbar');
+        const ecosystemSection = document.getElementById('ecosystem');
+        let lastScrollY = window.scrollY;
+
         window.addEventListener('scroll', () => {
+            // Add background when scrolled
             if (window.scrollY > 80) navbar.classList.add('scrolled');
             else navbar.classList.remove('scrolled');
+
+            // Check if we are currently looking at the ecosystem section
+            let isInsideEcosystem = false;
+            if (ecosystemSection) {
+                const rect = ecosystemSection.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom > 80) {
+                    isInsideEcosystem = true;
+                }
+            }
+
+            // Hide/Show logic based on scroll direction AND section
+            if (isInsideEcosystem && window.scrollY > 80 && window.scrollY > lastScrollY) {
+                // Scrolling down inside ecosystem - hide navbar
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                // Scrolling up or outside ecosystem - show navbar
+                navbar.style.transform = 'translateY(0)';
+            }
+            lastScrollY = window.scrollY;
         });
 
         // 3. GSAP Hero Load Animations (Plays immediately)
@@ -4789,51 +4920,43 @@
         });
 
     </script>
-<script>
-// Hamburger Toggle
-document.addEventListener('DOMContentLoaded', () => {
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            
-            // Hamburger animation
-            const spans = hamburger.querySelectorAll('span');
-            if (navLinks.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
-                spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(5px, -6px)';
-            } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
+    <script>
+        // Hamburger Toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+
+                    // Hamburger animation
+                    const spans = hamburger.querySelectorAll('span');
+                    if (navLinks.classList.contains('active')) {
+                        spans[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+                        spans[1].style.opacity = '0';
+                        spans[2].style.transform = 'rotate(-45deg) translate(5px, -6px)';
+                    } else {
+                        spans[0].style.transform = 'none';
+                        spans[1].style.opacity = '1';
+                        spans[2].style.transform = 'none';
+                    }
+                });
+
+                // Close menu on link click
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        const spans = hamburger.querySelectorAll('span');
+                        spans[0].style.transform = 'none';
+                        spans[1].style.opacity = '1';
+                        spans[2].style.transform = 'none';
+                    });
+                });
             }
         });
-        
-        // Close menu on link click
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                const spans = hamburger.querySelectorAll('span');
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-            });
-        });
-    }
-});
-</script>
-</body>
-
-</html> // Adding a subtle scale and fade animation while pinned
-// to remove the "hard stop" feeling and make it fluid
-ecoPinTl.fromTo(".ecosystem-container",
-{ scale: 1 },
-{ scale: 1.05, ease: "none" }
-);
-
-</script>
+    </script>
+<script src="work-loader.js"></script>
 </body>
 
 </html>
+
