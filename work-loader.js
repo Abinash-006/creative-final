@@ -3,7 +3,7 @@
     if (!workGrid) return;
 
     try {
-        const response = await fetch('http://localhost:3000/api/work');
+        const response = await fetch('/api/work');
         if (!response.ok) throw new Error('Failed to fetch');
         const works = await response.json();
         

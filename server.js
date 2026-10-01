@@ -127,7 +127,7 @@ const razorpay = new Razorpay({
 // Create Order API
 app.post('/create-order', async (req, res) => {
     try {
-        const { amount } = req.body;
+        const { amount, name, email, phone } = req.body;
         if (!amount || amount <= 0) {
             return res.status(400).json({ error: 'Invalid amount' });
         }
@@ -142,6 +142,9 @@ app.post('/create-order', async (req, res) => {
 
         // Save pending donation to DB
         const newDonation = new Donation({
+            donorName: name || 'Generous Donor',
+            email: email || 'donor@example.com',
+            phone: phone || 'Not provided',
             amount: amount,
             razorpayOrderId: order.id,
             status: 'Pending'
@@ -152,6 +155,23 @@ app.post('/create-order', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error creating order' });
+    }
+});
+
+// Cancel Payment API
+app.post('/cancel-payment', async (req, res) => {
+    try {
+        const { razorpay_order_id } = req.body;
+        if (razorpay_order_id) {
+            await Donation.findOneAndUpdate(
+                { razorpayOrderId: razorpay_order_id },
+                { status: 'Failed' }
+            );
+        }
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error cancelling payment' });
     }
 });
 
@@ -193,6 +213,18 @@ app.post('/verify-payment', async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Error verifying payment' });
     }
+});
+
+// UX State: 404 Not Found Handler
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
+// UX State: 500 Internal Server Error Handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    // Fallback if 500.html doesn't exist yet, we just send a generic message
+    res.status(500).send('<h1>500 - Internal Server Error</h1><p>Something broke on our end. We are fixing it.</p>');
 });
 
 const PORT = process.env.PORT || 3000;
