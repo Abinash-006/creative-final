@@ -118,15 +118,24 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log("MongoDB Connection Error: ", err));
 
-// Razorpay Instance
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+// Keep the site available when payment credentials are not configured.
+const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
+const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
+const razorpay = razorpayKeyId && razorpayKeySecret
+    ? new Razorpay({ key_id: razorpayKeyId, key_secret: razorpayKeySecret })
+    : null;
+
+if (!razorpay) {
+    console.warn('Razorpay is not configured; donation payments are unavailable.');
+}
 
 // Create Order API
 app.post('/create-order', async (req, res) => {
     try {
+        if (!razorpay) {
+            return res.status(503).json({ error: 'Payment service is not configured' });
+        }
+
         const { amount, name, email, phone } = req.body;
         if (!amount || amount <= 0) {
             return res.status(400).json({ error: 'Invalid amount' });
@@ -178,6 +187,10 @@ app.post('/cancel-payment', async (req, res) => {
 // Verify Payment API
 app.post('/verify-payment', async (req, res) => {
     try {
+        if (!razorpayKeySecret) {
+            return res.status(503).json({ error: 'Payment service is not configured' });
+        }
+
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
@@ -186,7 +199,7 @@ app.post('/verify-payment', async (req, res) => {
 
         const body = razorpay_order_id + "|" + razorpay_payment_id;
         const expectedSignature = crypto
-            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .createHmac('sha256', razorpayKeySecret)
             .update(body.toString())
             .digest('hex');
 
